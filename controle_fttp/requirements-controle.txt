@@ -1,0 +1,6 @@
+# Outils du kit de contrôle (à installer dans le .venv du projet, en plus de requirements.txt)
+playwright>=1.45
+Pillow>=10
+numpy>=1.26
+time-machine>=2.15     # horloge figée (fonctionne sous Windows)
+# Puis, une seule fois : python -m playwright install chromium

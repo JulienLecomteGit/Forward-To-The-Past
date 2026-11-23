@@ -1,0 +1,112 @@
+"""Vérification ponctuelle de l'admin (parties interactives non jouées par le kit) : AppTest de Streamlit.
+
+Pour chaque version : ouvre l'espace admin, clique « Lancer le test » (qualité), « Simuler » (3 scénarios), sélectionne le
+mode « Un film » de l'aperçu, puis exporte TOUT le contenu affiché (textes, HTML, graphiques, tableaux, libellés).
+Usage (depuis controle_fttp, .venv activé) :
+    python controle_admin.py ..\\Forward_To_The_Past_v9 ..\\Forward_To_The_Past_refacto ..\\Forward_To_The_Past_v9\\data\\fttp.db
+Durée ≈ 3 min. Verdict : ✅ IDENTIQUE / ❌ DIFFÉRENT, étape par étape.
+"""
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+CODE = r'''
+import json, os, random, re, sys, warnings, logging
+warnings.filterwarnings("ignore"); logging.disable(logging.CRITICAL)
+import time_machine
+time_machine.travel(float(os.environ["FTTP_HORLOGE"]), tick=False).start()
+random.seed(1985)
+from google.protobuf.json_format import MessageToDict
+from streamlit.testing.v1 import AppTest
+from streamlit.testing.v1 import element_tree as et
+# Contournement d'un bug de l'outil de test Streamlit 1.50 (boutons de choix : options = objets, pas des textes)
+def _indices(self):
+    valeurs = self.value if isinstance(self.value, (list, tuple)) else ([] if self.value is None else [self.value])
+    if self.format_func is None:  # étoiles (st.feedback) : la valeur est déjà l'indice
+        return [int(v) for v in valeurs]
+    contenus = [o.content for o in self.options]
+    sortie = []
+    for v in valeurs:
+        f = self.format_func(v)
+        sortie.append(contenus.index(f.content if hasattr(f, "content") else str(f)))
+    return sortie
+et.ButtonGroup.indices = property(_indices)
+
+IGNORE = {"uuid", "id", "formId", "deltaPath", "fragmentId", "scriptRunId", "key"}
+import base64, pyarrow as pa
+def tableau(b64):
+    t = pa.ipc.open_stream(base64.b64decode(b64)).read_all().to_pandas()
+    return {"colonnes": [str(c) for c in t.columns], "lignes": t.astype(str).values.tolist()}
+def nettoie(x):
+    if isinstance(x, dict):
+        return {k: (tableau(v) if k == "data" and isinstance(v, str) and v.startswith("/////") else nettoie(v))
+                for k, v in x.items() if k not in IGNORE}
+    if isinstance(x, list):
+        return [nettoie(v) for v in x]
+    if isinstance(x, str):  # identifiant aléatoire des tableaux mis en forme par pandas (Styler) : sans effet visible
+        return re.sub(r"T_[0-9a-f]{5,}", "T_x", x)
+    return x
+def contenu(at):
+    out = []
+    def visite(n):
+        p = getattr(n, "proto", None)
+        if p is not None and hasattr(p, "DESCRIPTOR"):
+            out.append(nettoie(MessageToDict(p)))
+        for c in getattr(n, "children", {}).values() if isinstance(getattr(n, "children", None), dict) else []:
+            visite(c)
+    visite(at._tree)
+    return out
+
+etapes = {}
+at = AppTest.from_file("app.py", default_timeout=600)
+at.session_state["page"] = "admin"; at.session_state["admin_ok"] = True
+at.run(); etapes["admin_ouvert"] = contenu(at)
+b = [x for x in at.button if x.label.startswith("Lancer le test")][0]
+b.click().run(); etapes["qualite_test_lance"] = contenu(at)
+for scen in ("❤️ Aime 5 films", "🤮 Rejette 5 films", "🧬 Change ses genres"):
+    at.session_state["inf_scen"] = scen; at.run()
+    at.button(key="inf_go").click().run(); etapes["simulation " + scen] = contenu(at)
+at.session_state["ap_mode"] = "🎬 Un film"; at.run(); etapes["apercu_film"] = contenu(at)
+at.session_state["adm_fictifs"] = False; at.run(); etapes["vue_ensemble_reels"] = contenu(at)
+erreurs = [str(e.value)[:200] for e in at.exception]
+print(json.dumps({"etapes": etapes, "exceptions": erreurs}, ensure_ascii=False, sort_keys=True, default=str))
+'''
+
+
+def executer(projet: Path, base: Path, horloge: str) -> dict:
+    tmp = Path(tempfile.gettempdir()) / "fttp_controle_admin" / "fttp.db"  # chemin FIXE (affiché dans l'admin)
+    tmp.parent.mkdir(exist_ok=True)
+    for suffixe in ("-wal", "-shm"):
+        Path(str(tmp) + suffixe).unlink(missing_ok=True)
+    tmp.write_bytes(base.read_bytes())
+    env = dict(os.environ, PYTHONHASHSEED="0", TZ="Europe/Paris", FTTP_BDD=str(tmp), FTTP_HORLOGE=horloge, PYTHONIOENCODING="utf-8")
+    r = subprocess.run([sys.executable, "-c", CODE], cwd=projet, env=env, capture_output=True, text=True, encoding="utf-8")
+    if r.returncode:
+        raise SystemExit(r.stderr[-3000:])
+    return json.loads(r.stdout.strip().splitlines()[-1])
+
+
+ref, cand, base = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
+h = str(float(int(time.time()) // 60 * 60))
+A, B = executer(ref, base, h), executer(cand, base, h)
+print("exceptions référence :", A["exceptions"] or "aucune", "| candidat :", B["exceptions"] or "aucune")
+ok = True
+for etape in A["etapes"]:
+    a, b = A["etapes"][etape], B["etapes"].get(etape)
+    same = a == b
+    ok &= same
+    print(f"  {'✅' if same else '❌'} {etape:32} {len(a)} éléments affichés" + ("" if same else f" (candidat : {len(b or [])})"))
+    if not same and b is not None:
+        for i, (x, y) in enumerate(zip(a, b)):
+            if x != y:
+                if isinstance(x.get("data"), dict):
+                    for la, lb in zip(x["data"]["lignes"], y["data"]["lignes"]):
+                        if la != lb: print("     ligne réf.:", la, "\n     ligne cand:", lb)
+                else:
+                    print("     1er écart, élément", i, ":", json.dumps(x, ensure_ascii=False)[:300], "\n     ≠", json.dumps(y, ensure_ascii=False)[:300])
+                break
+print("✅ IDENTIQUE" if ok and A["exceptions"] == B["exceptions"] else "❌ DIFFÉRENT")

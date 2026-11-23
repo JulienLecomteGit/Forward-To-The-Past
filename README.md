@@ -172,6 +172,7 @@ Forward_To_The_Past/
 ├── architecture.html       # schéma interactif des dossiers, des flux de données et du trajet d'un clic ❤️
 ├── BUGS_ET_RISQUES.md      # points connus, signalés et non corrigés
 ├── controle_correspondance.json  # où se trouve chaque élément de la V9 (utilisé par le kit de contrôle)
+├── controle_fttp/          # kit de contrôle de non-régression (voir controle_fttp/LISEZMOI.md)
 └── requirements.txt        # librairies (Streamlit 1.50, pandas, scikit-learn, plotly, Pillow…)
 ```
 
@@ -186,3 +187,17 @@ Forward_To_The_Past/
 | Polices absentes | Vérifier que le dossier `static/polices/` est présent (polices servies localement) |
 | Catalogue introuvable | Placer `dataset_catalogue_Final_enrichi.csv` dans `data/` |
 | Erreur après mise à jour | Supprimer `data/fttp.db` puis relancer (la base est recréée) |
+
+## 📚 Sources des données et usage
+
+- **Catalogue** (`data/dataset_catalogue_Final_enrichi.csv`) construit à partir de :
+  - **IMDb Non-Commercial Datasets** (titres, notes, votes, casting, réalisation) — https://developer.imdb.com/non-commercial-datasets/ — information courtesy of IMDb (https://www.imdb.com), usage personnel et non commercial ;
+  - **TMDB** (affiches, synopsis, langues, pays) — *This product uses the TMDB API but is not endorsed or certified by TMDB* — https://www.themoviedb.org ;
+  - entrées en salles en France issues des données publiques du CNC.
+- **Usage pédagogique et non commercial** : projet du bootcamp Data Analyst (ciné-club « Forward To The Past », appel à projets CNC). Aucune exploitation commerciale du catalogue ni de l'app.
+- **Membres** : la base `data/fttp.db` n'est pas publiée (`.gitignore`) ; elle est recréée au lancement avec des membres de démonstration fictifs.
+- **Code admin de démonstration** : « 007 » tant que `.streamlit/secrets.toml` n'existe pas. Avant toute mise en ligne, créer ce fichier avec `ADMIN_MDP = "…"` (voir `BUGS_ET_RISQUES.md`, points 1 et 19).
+
+## ✅ Contrôle de non-régression
+
+Le dossier `controle_fttp/` contient le kit qui prouve qu'une version modifiée calcule et affiche exactement la même chose que la référence. Le copier à côté du projet, puis suivre `controle_fttp/LISEZMOI.md`.
