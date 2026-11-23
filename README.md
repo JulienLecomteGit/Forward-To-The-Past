@@ -1,4 +1,4 @@
-# 🌴 Forward To The Past · ciné-club
+# 🍿 Forward To The Past · ciné-club
 
 [![Ouvrir dans Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://forward-to-the-past.streamlit.app/) · **App en ligne : https://forward-to-the-past.streamlit.app/**
 
