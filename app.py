@@ -9,7 +9,7 @@ Utilisé par : —
 """
 import streamlit as st
 
-st.set_page_config(page_title="Forward To The Past · Ciné-club 88 MPH", page_icon="🌴", layout="wide",
+st.set_page_config(page_title="Forward To The Past · Ciné-club 88 MPH", page_icon="🍿", layout="wide",
                    initial_sidebar_state="collapsed")
 
 from demo.generation import generer as generer_demo  # noqa: E402
