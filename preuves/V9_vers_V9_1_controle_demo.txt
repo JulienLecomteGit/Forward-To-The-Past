@@ -1,0 +1,2 @@
+   lignes : utilisateurs 180, preferences 180, interactions 14264, evenements 9445, seances 1298 · empreinte 27442adf6503461e
+✅ CONFORME — base de démo strictement identique (hors empreintes de mots de passe)

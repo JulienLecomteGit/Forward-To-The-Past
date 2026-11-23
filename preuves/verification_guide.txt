@@ -1,0 +1,5 @@
+Contrôles : 50986 réussis, 0 échecs
+Écrans photographiés : 44 (22 vues × ordinateur + téléphone) · zones touchables : 13624
+Règles CSS visibles sur au moins une capture : 465/580 (les autres : recherche et Bibliothèque)
+Taille du fichier : 2,944,980 octets (2.81 Mio) · limite Drive 3,1 Mo : OK
+VERDICT : CONFORME

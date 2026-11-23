@@ -1,0 +1,9 @@
+exceptions référence : aucune | candidat : aucune
+  ✅ admin_ouvert                     167 éléments affichés
+  ✅ apercu_film                      187 éléments affichés
+  ✅ qualite_test_lance               182 éléments affichés
+  ✅ simulation ❤️ Aime 5 films       188 éléments affichés
+  ✅ simulation 🤮 Rejette 5 films     188 éléments affichés
+  ✅ simulation 🧬 Change ses genres   187 éléments affichés
+  ✅ vue_ensemble_reels               157 éléments affichés
+✅ IDENTIQUE
