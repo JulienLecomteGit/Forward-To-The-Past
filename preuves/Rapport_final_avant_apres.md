@@ -130,19 +130,15 @@ Un piège métier (un réglage du moteur modifié volontairement) est toujours d
 2. **Avant de changer de CSV** : risques n° 4 et 5 (garde sur l'année, test qualité).
 3. **Pour chaque future modification** : `LISEZMOI_CODE.md` § 5 pour trouver le fichier, puis `controler.py --golden-seul`. Une modification volontaire du visuel fait apparaître un écart : c'est normal, et la nouvelle version devient la référence.
 
-## 8. Livraison finale (dossier Drive « Final », mis à jour le 23/11)
+## 8. Livraison finale (dossier Drive « Final », 23/11)
 
 | Fichier | Contenu |
 |---|---|
-| `FTTP_V9_1_final_1_code.zip` | code V9.1 + guide + documentation (sans `data/` ni `static/`) |
-| `FTTP_V9_1_final_2_data.zip` | `data/` : catalogue CSV + base de démo `fttp.db` (identiques à la V9) |
-| `FTTP_V9_1_final_3_static_affiches.zip` | `static/affiches/` (identique à la V9) |
-| `FTTP_V9_1_final_4_static_reste.zip` | le reste de `static/` : avatars, polices, bannière, image de partage, index de recherche (identique à la V9) |
-| `GUIDE_PERSONNALISATION.html` | guide interactif (ouvrir dans Chrome) |
-| `BUGS_ET_RISQUES.md` · `LISEZMOI_CODE.md` · `architecture.html` | documentation à jour |
-| `Final_V9_vers_V9_1_rapport_kit.md` · `Final_V9_vers_V9_1_controle_*.txt` | contrôles du Lot 13 contre la V9 d'origine (bruts, et admin/écrans relancés avec l'ancien CSS) |
-| `Final_V9_1_vers_Lot14_rapport_golden.md` · `Final_V9_1_vers_Lot14_controle_demo.txt` · `Final_verification_guide.txt` | contrôles du Lot 14 |
+| `Forward_To_The_Past_V9.1.zip` | **archive unique et complète** (10,7 Mo) : code, `data/` (catalogue + base de démo), `static/`, guide, documentation, `LISEZ_D_ABORD.md`, kit `controle_fttp/`, preuves des contrôles dans `preuves/` |
+| `GUIDE_PERSONNALISATION.html` | le guide, à ouvrir sans dézipper |
 | `Rapport_final_avant_apres.md` | ce document |
 
-**Projet complet** : dézipper les 4 archives **au même endroit** (elles partagent le dossier `Forward_To_The_Past/`), puis lancer `python -m streamlit run app.py`. Découpage par dossier à cause de la limite Drive de 3,1 Mo par fichier ; aucun fichier n'est coupé. Vérifié : les 4 archives remontées = projet identique, `data/` et `static/` identiques à la V9, l'app démarre sans erreur. Autre voie : GitHub › Code › Download ZIP (sans `fttp.db`, recréée au lancement).
-
+Vérifié : archive extraite dans un dossier vide → `data/` et `static/` identiques à la V9, projet identique au Lot 14, 0 fichier abîmé, l'app démarre sans erreur.
+**Lancer** : extraire dans `C:\Users\Julie\code`, puis suivre `LISEZ_D_ABORD.md`.
+**GitHub (version 9.1)** : même contenu, sauf `data/fttp.db` (exclue volontairement, recréée au lancement).
+L'historique des lots (Lot_1 à Lot_14, audit, autotest) est rangé dans `05_Livrables/Historique_lots`.
