@@ -1,7 +1,7 @@
 # Bugs et risques connus
 
 > Revue faite avec Julien le 23/11/2026 : chaque point a été corrigé ou laissé **par décision**.
-> Mise à jour Lot 14 (guide de personnalisation refait) : section D, points 13 à 20, **à décider**.
+> Mise à jour Lot 14 (guide de personnalisation refait) : section D, points 13 à 21, **à décider**.
 > Légende gravité : 🟠 Moyenne · 🟡 Faible · ⚪ Info. **[F]** = fait vérifié dans le code.
 
 ## A. Laissés volontairement (décision du 23/11/2026)
@@ -36,7 +36,7 @@
 | — | 14 motifs de code répétés (libellés, colonnes mobile, dates, nombres, palette…) | factorisés aux Lots 7 et 8, textes visibles identiques |
 | — | 9 fonctions de plus de 50 lignes, dont une de 166 | découpées au Lot 10 : 50 lignes au plus |
 
-## D. Repérés au Lot 14 (guide de personnalisation, publication) — à décider
+## D. Repérés au Lot 14 (guide de personnalisation, publication, mise en ligne) — à décider
 
 | # | Constat | Gravité | Effet | Correction possible |
 |---|---|---|---|---|
@@ -49,3 +49,4 @@
 | 19 | **Code admin « 007 » visible dans un dépôt public** (`config/acces.py`) | 🟠 si l'app est mise en ligne | quiconque lit le code connaît le code de démo | identique au point 1 : `.streamlit/secrets.toml` avec `ADMIN_MDP` avant toute mise en ligne (le fichier est déjà exclu de Git) |
 | 20 | **Base des membres exclue de Git** (`data/*.db` dans `.gitignore`) | ⚪ Info (protection) | même si les 180 membres sont fictifs, la base n'est pas publiée ; elle est recréée automatiquement au lancement | à garder ainsi |
 
+| 21 | **Premier démarrage : deux visiteurs simultanés font planter le second** (`sqlite3.IntegrityError: UNIQUE constraint failed: utilisateurs.email`). Constaté sur Streamlit Cloud le 23/11, reproduit en local (copie fraîche du dépôt, 2 visiteurs à 3 s d'écart). Déjà présent dans la V9 (`app.py` · `main` : `if nb_membres() == 0` puis création des 180 membres, sans verrou) | 🟠 si mise en ligne | pendant la création de la base (environ 1 min sur Streamlit Cloud), un 2ᵉ chargement de la page recrée les mêmes membres → erreur rouge pour ce visiteur ; la base reste correcte (180 membres) et les visiteurs suivants n'ont aucun problème | verrou partagé (`st.cache_resource` + `threading.Lock`) autour de la création, avec revérification `nb_membres() == 0` dans le verrou : le 2ᵉ visiteur attend puis voit l'accueil — **à décider** |

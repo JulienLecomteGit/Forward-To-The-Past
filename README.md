@@ -1,5 +1,7 @@
 # 🌴 Forward To The Past · ciné-club
 
+[![Ouvrir dans Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://forward-to-the-past.streamlit.app/) · **App en ligne : https://forward-to-the-past.streamlit.app/**
+
 Application Streamlit du Projet 2 (appel à projets CNC) : ciné-club rétro 80s avec **inscription façon Spotify/Netflix**, **moteur de recommandation personnalisé**, **carnet de séance**, **version mobile** et **espace admin** pour piloter le moteur.
 
 ---
