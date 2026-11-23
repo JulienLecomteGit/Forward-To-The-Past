@@ -1,0 +1,122 @@
+{
+  "scifi_1": {
+    "libelle": "Gilet rouge",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "scifi_2": {
+    "libelle": "Savant fou",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "scifi_3": {
+    "libelle": "Manteau noir",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "scifi_4": {
+    "libelle": "Rousse cosmique",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "scifi_5": {
+    "libelle": "Cyborg",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "scifi_6": {
+    "libelle": "Astronaute",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "robot_retro": {
+    "libelle": "Droïde synthwave",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "cosmonaute_vice": {
+    "libelle": "Cosmonaute",
+    "categorie": "Sci-Fi & 80s",
+    "actif": true
+  },
+  "gangsters_1": {
+    "libelle": "Play-boy 70s",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "gangsters_2": {
+    "libelle": "Frange noire",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "gangsters_3": {
+    "libelle": "Pilote de nuit",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "gangsters_4": {
+    "libelle": "L'Aventurier",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "gangsters_5": {
+    "libelle": "Smoking",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "gangsters_6": {
+    "libelle": "Katana",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "pop_5": {
+    "libelle": "Le Solitaire",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "aventuriere_action": {
+    "libelle": "Aventurière",
+    "categorie": "Gangsters & Action",
+    "actif": true
+  },
+  "pop_1": {
+    "libelle": "La Parisienne",
+    "categorie": "Cinéma culte",
+    "actif": true
+  },
+  "pop_2": {
+    "libelle": "L'Agent",
+    "categorie": "Cinéma culte",
+    "actif": true
+  },
+  "pop_3": {
+    "libelle": "Le Boxeur",
+    "categorie": "Cinéma culte",
+    "actif": true
+  },
+  "pop_6": {
+    "libelle": "Le Détective",
+    "categorie": "Cinéma culte",
+    "actif": true
+  },
+  "realisateur_70s": {
+    "libelle": "Réalisateur 70s",
+    "categorie": "Cinéma culte",
+    "actif": true
+  },
+  "pop_4": {
+    "libelle": "Doberman cool",
+    "categorie": "Mascottes & Vice",
+    "actif": true
+  },
+  "chat_miami": {
+    "libelle": "Chat Miami",
+    "categorie": "Mascottes & Vice",
+    "actif": true
+  },
+  "aviatrice_vice": {
+    "libelle": "Aviatrice",
+    "categorie": "Mascottes & Vice",
+    "actif": true
+  }
+}

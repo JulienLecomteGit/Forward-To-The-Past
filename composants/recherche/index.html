@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Recherche prédictive · Forward To The Past</title>
+<style>
+@font-face{font-family:'Plus Jakarta Sans';font-weight:400;font-display:swap;src:url(../../app/static/polices/plus-jakarta-sans-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:600;font-display:swap;src:url(../../app/static/polices/plus-jakarta-sans-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:700;font-display:swap;src:url(../../app/static/polices/plus-jakarta-sans-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:800;font-display:swap;src:url(../../app/static/polices/plus-jakarta-sans-latin-800-normal.woff2) format('woff2')}
+:root{--rose:#DA4B84;--teal:#7AD6CE;--ambre:#EBC374;--txt:#FAF5EE;--doux:#CEC3DF;--ligne:rgba(255,255,255,.09)}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;color:var(--txt);
+ font-family:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+#racine{padding:0 1px 4px}
+.lab{font-size:14px;line-height:22.4px;min-height:22.4px;margin:0 0 5.6px;color:var(--txt)}
+.lab[hidden]{display:none}
+.champ{position:relative;display:flex;align-items:center;height:40px;background:#160F2D;border:1px solid var(--ligne);
+ border-radius:10px;padding:0 .4rem 0 2.4rem;transition:border-color .15s ease}
+.champ:focus-within{border-color:rgba(122,214,206,.6)}
+.loupe{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:.75}
+input{flex:1;min-width:0;height:100%;background:transparent;border:0;outline:0;color:var(--txt);font:inherit;font-size:.95rem}
+input::placeholder{color:#8F84A6}
+.effacer{display:none;border:0;background:transparent;color:var(--doux);font-size:1rem;width:30px;height:30px;border-radius:8px;cursor:pointer}
+.effacer:hover{background:rgba(255,255,255,.07);color:#fff}
+.champ.rempli .effacer{display:block}
+.liste{margin-top:6px;background:#1B1336;border:1px solid rgba(255,255,255,.14);border-radius:12px;overflow:hidden;
+ box-shadow:0 12px 28px rgba(0,0,0,.45)}
+.liste[hidden]{display:none}
+.section{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:800;padding:.55rem .75rem .25rem}
+.item{display:flex;align-items:center;gap:.75rem;padding:.38rem .7rem;cursor:pointer;border-left:3px solid transparent}
+.item.actif{background:rgba(218,75,132,.16);border-left-color:var(--rose)}
+.vignette{position:relative;width:32px;height:48px;border-radius:5px;flex:none;overflow:hidden;
+ background:repeating-linear-gradient(135deg,#1a1230,#1a1230 6px,#241942 7px,#241942 8px)}
+.vignette img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.icone{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;background:rgba(122,214,206,.12);font-size:.95rem}
+.texte{min-width:0;flex:1}
+.titre{font-weight:700;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.titre mark{background:none;color:var(--ambre);font-weight:800}
+.sous{font-size:.74rem;color:var(--doux);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.annee{font-weight:800;color:var(--ambre);margin-right:.35rem}
+.tout .titre{font-weight:600}
+.vide{padding:.7rem .8rem;font-size:.82rem;color:var(--doux)}
+.pied{display:flex;justify-content:space-between;padding:.35rem .75rem;font-size:.66rem;color:#8F84A6;border-top:1px solid var(--ligne)}
+kbd{font-family:inherit;border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:0 .3rem;font-size:.62rem}
+</style>
+</head>
+<body>
+<div id="racine">
+  <div class="lab" id="lab" hidden></div>
+  <div class="champ" id="champ">
+    <svg class="loupe" viewBox="0 0 24 24" fill="none" stroke="#CEC3DF" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="text" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="liste">
+    <button class="effacer" id="x" type="button" title="Effacer" aria-label="Effacer">✕</button>
+  </div>
+  <div class="liste" id="liste" role="listbox" hidden></div>
+</div>
+<script>
+(function () {
+  "use strict";
+  var S = {args: {}, fichier: null, films: [], gens: [], items: [], actif: -1, appliquee: null, ouvert: false, base: ""};
+  var q = document.getElementById("q"), champ = document.getElementById("champ"),
+      liste = document.getElementById("liste"), x = document.getElementById("x");
+
+  function msg(type, data) {
+    var m = {isStreamlitMessage: true, type: type};
+    for (var k in (data || {})) { m[k] = data[k]; }
+    window.parent.postMessage(m, "*");
+  }
+  function hauteur() { msg("streamlit:setFrameHeight", {height: Math.ceil(document.getElementById("racine").getBoundingClientRect().height) + 2}); }
+  function envoyer(v) { v.n = Date.now() + Math.random(); msg("streamlit:setComponentValue", {value: v, dataType: "json"}); }
+  function norm(s) {
+    return (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+      .replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/[^a-z0-9]+/g, " ").trim();
+  }
+  function echap(s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]; }); }
+  function surligner(titre, nq) {
+    if (!nq) { return echap(titre); }
+    var n = norm(titre), i = n.indexOf(nq);
+    if (i < 0 || n.length !== titre.length) { return echap(titre); }  // accents composés : pas de surlignage approximatif
+    return echap(titre.slice(0, i)) + "<mark>" + echap(titre.slice(i, i + nq.length)) + "</mark>" + echap(titre.slice(i + nq.length));
+  }
+  function image(code) {
+    if (!code) { return ""; }
+    if (code.charAt(0) === "L") { return S.base + "app/static/affiches/" + code.slice(2); }
+    return "https://image.tmdb.org/t/p/w92" + code;
+  }
+
+  function charger(fichier) {
+    if (!fichier || S.fichier === fichier) { return; }
+    S.fichier = fichier;
+    S.base = new URL("../../", window.location.href).href;
+    fetch(new URL("../../app/static/" + fichier, window.location.href)).then(function (r) { return r.json(); }).then(function (d) {
+      S.films = d.films.map(function (f, i) {
+        return {t: f[0], titre: f[1], orig: f[2] || "", an: f[3], genre: f[4], img: f[5], real: f[6] || "", rang: i,
+                n1: norm(f[1]), n2: norm(f[2] || "")};
+      });
+      S.gens = d.personnes.map(function (p) { return {nom: p[0], nb: p[1], role: p[2], n: norm(p[0])}; });
+      if (S.ouvert) { filtrer(); }
+    });
+  }
+
+  function chercherFilms(nq, max) {
+    var mots = nq.split(" "), res = [], restr = S.args.restreindre ? new Set(S.args.restreindre) : null, annee = /^\d{4}$/.test(nq);
+    for (var k = 0; k < S.films.length; k++) {
+      var f = S.films[k];
+      if (restr && !restr.has(f.t)) { continue; }
+      var s = -1, noms = [f.n1, f.n2];
+      for (var m = 0; m < 2; m++) {
+        var n = noms[m];
+        if (!n) { continue; }
+        if (n === nq) { s = Math.max(s, 1000); }
+        else if (n.indexOf(nq) === 0) { s = Math.max(s, 800); }
+        else if ((" " + n).indexOf(" " + nq) >= 0) { s = Math.max(s, 600); }
+        else if (mots.every(function (w) { return n.indexOf(w) >= 0; })) { s = Math.max(s, 400); }
+      }
+      if (s < 0 && annee && String(f.an) === nq) { s = 300; }
+      if (s < 0 && restr && norm(f.real).indexOf(nq) >= 0) { s = 200; }
+      if (s >= 0) { res.push([s - f.rang * 0.01, f]); }
+    }
+    res.sort(function (a, b) { return b[0] - a[0]; });
+    return res.slice(0, max).map(function (r) { return r[1]; });
+  }
+
+  function chercherGens(nq, max) {
+    if (!S.args.personnes || nq.length < 3) { return []; }
+    var res = [];
+    for (var k = 0; k < S.gens.length; k++) {
+      var p = S.gens[k];
+      if (p.n.indexOf(nq) === 0 || (" " + p.n).indexOf(" " + nq) >= 0) { res.push(p); }
+      if (res.length >= 40) { break; }
+    }
+    return res.slice(0, max);
+  }
+
+  function filtrer() {
+    var brut = q.value, nq = norm(brut), mode = S.args.mode || "film";
+    champ.classList.toggle("rempli", brut.length > 0);
+    S.items = [];
+    if (!nq) { fermer(); return; }
+    var html = "";
+    if (mode !== "film") {
+      S.items.push({type: "texte", q: brut.trim()});
+      html += '<div class="item tout" data-i="0"><div class="icone">🔎</div><div class="texte"><div class="titre">' +
+        (mode === "liste" ? "Filtrer ma liste : « " : "Rechercher « ") + echap(brut.trim()) + " »" +
+        (mode === "liste" ? "" : " dans tout le catalogue") + '</div></div></div>';
+    }
+    var films = chercherFilms(nq, mode === "film" ? 8 : 7), gens = chercherGens(nq, 3);
+    if (films.length) {
+      html += '<div class="section">Films</div>';
+      films.forEach(function (f) {
+        var i = S.items.length, src = image(f.img);
+        S.items.push({type: "film", tconst: f.t, titre: f.titre});
+        html += '<div class="item" data-i="' + i + '" role="option"><div class="vignette">' +
+          (src ? '<img src="' + src + '" alt="" loading="lazy" onerror="this.remove()">' : "") + '</div><div class="texte">' +
+          '<div class="titre">' + surligner(f.titre, nq) + '</div><div class="sous"><span class="annee">' + (f.an || "—") + '</span>' +
+          echap(f.genre || "") + (f.orig && norm(f.orig) !== f.n1 ? " · " + echap(f.orig) : (f.real ? " · " + echap(f.real) : "")) +
+          '</div></div></div>';
+      });
+    }
+    if (gens.length) {
+      html += '<div class="section">Personnes</div>';
+      gens.forEach(function (p) {
+        var i = S.items.length;
+        S.items.push({type: "texte", q: p.nom});
+        html += '<div class="item" data-i="' + i + '"><div class="icone">' + (p.role === "r" ? "🎬" : "🌟") + '</div><div class="texte">' +
+          '<div class="titre">' + surligner(p.nom, nq) + '</div><div class="sous">' + p.nb + " films au catalogue" +
+          (p.role === "r" ? " · réalisation" : "") + '</div></div></div>';
+      });
+    }
+    if (!films.length && !gens.length && mode === "film") {
+      html += '<div class="vide">' + (S.films.length ? "Aucun film ne correspond. Essaie le titre original." : "Chargement du catalogue…") + '</div>';
+    }
+    html += '<div class="pied"><span><kbd>↑</kbd> <kbd>↓</kbd> naviguer · <kbd>Entrée</kbd> choisir</span><span><kbd>Échap</kbd> fermer</span></div>';
+    liste.innerHTML = html;
+    S.actif = mode === "film" && S.items.length ? 0 : -1;
+    marquer();
+    liste.hidden = false;
+    S.ouvert = true;
+    hauteur();
+  }
+
+  function marquer() {
+    var els = liste.querySelectorAll(".item");
+    for (var k = 0; k < els.length; k++) { els[k].classList.toggle("actif", +els[k].getAttribute("data-i") === S.actif); }
+    var a = liste.querySelector(".item.actif");
+    if (a) { q.setAttribute("aria-activedescendant", ""); }
+  }
+  function fermer() { liste.hidden = true; liste.innerHTML = ""; S.ouvert = false; S.actif = -1; hauteur(); }
+  function choisir(i) {
+    var it = S.items[i];
+    if (!it) { return; }
+    if (it.type === "film") { q.value = (S.args.mode === "film") ? it.titre : q.value; envoyer({type: "film", tconst: it.tconst}); }
+    else { q.value = it.q; envoyer({type: "texte", q: it.q}); }
+    champ.classList.toggle("rempli", q.value.length > 0);
+    fermer();
+    q.blur();
+  }
+
+  q.addEventListener("input", filtrer);
+  q.addEventListener("focus", function () { if (q.value) { filtrer(); } });
+  q.addEventListener("blur", function () { setTimeout(fermer, 120); });
+  q.addEventListener("keydown", function (e) {
+    var n = S.items.length;
+    if (e.key === "ArrowDown") { e.preventDefault(); if (!S.ouvert) { filtrer(); } S.actif = n ? (S.actif + 1) % n : -1; marquer(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); S.actif = n ? (S.actif - 1 + n) % n : -1; marquer(); }
+    else if (e.key === "Enter") {
+      e.preventDefault();
+      if (S.actif >= 0) { choisir(S.actif); }
+      else if ((S.args.mode || "film") !== "film") { envoyer({type: "texte", q: q.value.trim()}); fermer(); q.blur(); }
+    } else if (e.key === "Escape") { fermer(); }
+  });
+  liste.addEventListener("mousedown", function (e) {
+    var el = e.target.closest(".item");
+    if (el) { e.preventDefault(); choisir(+el.getAttribute("data-i")); }
+  });
+  liste.addEventListener("mousemove", function (e) {
+    var el = e.target.closest(".item");
+    if (el && +el.getAttribute("data-i") !== S.actif) { S.actif = +el.getAttribute("data-i"); marquer(); }
+  });
+  x.addEventListener("click", function () {
+    q.value = "";
+    champ.classList.remove("rempli");
+    fermer();
+    if ((S.args.mode || "film") !== "film") { envoyer({type: "texte", q: ""}); }
+    q.focus();
+  });
+
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "streamlit:render") { return; }
+    S.args = e.data.args || {};
+    q.placeholder = S.args.placeholder || "Rechercher un film…";
+    var lab = document.getElementById("lab");
+    lab.textContent = S.args.libelle || "";
+    lab.hidden = !S.args.libelle;
+    var v = S.args.valeur || "";
+    if (v !== S.appliquee) { S.appliquee = v; if (document.activeElement !== q) { q.value = v; champ.classList.toggle("rempli", v.length > 0); } }
+    charger(S.args.fichier);
+    hauteur();
+  });
+  if (window.ResizeObserver) { new ResizeObserver(hauteur).observe(document.getElementById("racine")); }
+  msg("streamlit:componentReady", {apiVersion: 1});
+  hauteur();
+})();
+</script>
+</body>
+</html>

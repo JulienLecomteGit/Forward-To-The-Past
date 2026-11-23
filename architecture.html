@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture FTTP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,600;1,800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap">
+<style>
+/* VOICE  technique, pour un novice qui reprend le code : précis, aéré, rien de décoratif sans sens
+   IDEA   le tableau de bord de la DeLorean : une pile de circuits, du point d'entrée jusqu'aux fichiers sur disque
+   PICTURE le schéma des 11 dossiers et d'app.py en couches, fils d'appels et flux de données, jeton qui suit un clic ❤️
+   COLOUR nuit #0B0620 (fond de l'app), cartes #1C1040, rose néon #DA4B84, turquoise #23E5FF, ambre #F7B32B
+   TYPE   Kanit (titres, comme la bannière de l'app) + Plus Jakarta Sans (texte, comme l'app)
+   LAYOUT ordinateur : schéma 62 % + panneau de détail collant ; téléphone : titre, schéma, panneau */
+:root{color-scheme:dark;--bg:#0B0620;--carte:#1C1040;--carte2:#251552;--ligne:#3A2C66;--ink:#FFF1E6;--doux:#C9BEDF;--rose:#DA4B84;--teal:#23E5FF;--ambre:#F7B32B;--violet:#8E7CC3}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:16px/1.55 "Plus Jakarta Sans",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,3.2vw,44px) max(4vw,16px)}
+h1{font:italic 800 clamp(30px,4.4vw,46px)/1.05 Kanit,Impact,sans-serif;letter-spacing:-.01em;margin:0 0 10px;text-wrap:balance}
+h1 b{color:var(--rose);font-weight:800}
+h2{font:600 22px/1.2 Kanit,sans-serif;margin:0 0 6px}
+.tete{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 32px;align-items:end;padding-bottom:12px}
+.tete p{margin:0;color:var(--doux);max-width:66ch}
+.modes{display:flex;flex-wrap:wrap;gap:8px}
+.modes button,.nav button{font:700 15px "Plus Jakarta Sans",sans-serif;color:var(--ink);background:var(--carte);border:1px solid var(--ligne);border-radius:10px;padding:10px 14px;min-height:44px;cursor:pointer}
+.modes button[aria-pressed=true]{background:var(--rose);border-color:var(--rose);color:#fff}
+button:focus-visible,.bloc:focus-visible,summary:focus-visible,li:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.grille{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:24px;align-items:start;padding-top:8px}
+.schema{position:relative;padding:6px 0 0}
+#fils{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.couche{position:relative;display:grid;grid-template-columns:7.2em minmax(0,1fr);gap:12px;align-items:center;margin-bottom:26px}
+.couche:last-child{margin-bottom:0}
+.etiq{font-size:13px;color:var(--doux);line-height:1.25}
+.rang{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.bloc{position:relative;z-index:1;flex:1 1 0;max-width:330px;background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:10px 12px 11px;cursor:pointer;transition:border-color .15s,box-shadow .15s,opacity .15s}
+.bloc .nom{font:600 18px/1.1 Kanit,sans-serif;color:var(--rose)}
+.bloc .nom small{font:400 13px "Plus Jakarta Sans",sans-serif;color:var(--doux);margin-left:6px;white-space:nowrap;display:inline-block}
+.bloc .role{font-size:14px;line-height:1.35;margin-top:3px}
+.bloc .puces{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.bloc .puces span{font-size:13px;padding:1px 7px;border-radius:6px;background:var(--carte2);color:var(--doux)}
+.bloc.disque{background:#120A2E;border-style:dashed;border-color:#4A3E7A}
+.bloc.disque .nom{color:var(--teal)}
+.bloc.actif{border-color:var(--rose);box-shadow:0 0 0 1px var(--rose),0 0 22px rgba(218,75,132,.45)}
+.bloc.lie{border-color:var(--teal)}
+.bloc.eteint{opacity:.38}
+.sol{position:absolute;left:0;right:0;bottom:-18px;height:96px;z-index:0;pointer-events:none;background:linear-gradient(transparent 0 0),repeating-linear-gradient(90deg,rgba(218,75,132,.22) 0 1px,transparent 1px 48px),repeating-linear-gradient(0deg,rgba(218,75,132,.22) 0 1px,transparent 1px 22px);transform:perspective(220px) rotateX(48deg);transform-origin:bottom;mask-image:linear-gradient(transparent,#000 70%)}
+path.appel{fill:none;stroke:var(--violet);stroke-width:1.3;opacity:.28}
+path.appel.sort{stroke:var(--rose);opacity:.95;stroke-width:2}
+path.appel.entre{stroke:var(--teal);opacity:.95;stroke-width:2}
+path.appel.cache{opacity:.06}
+path.flux{fill:none;stroke:var(--ambre);stroke-width:3.2;stroke-dasharray:9 7;opacity:.9}
+path.flux.vu{stroke:var(--teal);stroke-width:4;opacity:1}
+path.trajet{fill:none;stroke:var(--rose);stroke-width:3;opacity:.9}
+circle.jeton{fill:#fff;stroke:var(--rose);stroke-width:4}
+@media (prefers-reduced-motion:no-preference){path.flux{animation:defile 1.1s linear infinite}circle.jeton{transition:cx .55s ease,cy .55s ease}}
+@keyframes defile{to{stroke-dashoffset:-16}}
+aside{position:sticky;top:12px;background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:16px 18px;max-height:calc(100svh - 24px);overflow:auto}
+aside .sous{color:var(--doux);font-size:14px;margin:0 0 10px}
+aside .deps{font-size:14px;margin:4px 0}
+aside .deps b{color:var(--teal);font-weight:700}
+aside .deps b.r{color:var(--rose)}
+details{border-top:1px solid var(--ligne);padding:8px 0}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;gap:8px;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";color:var(--rose)}
+details[open] summary::before{content:"▾"}
+summary .lg{margin-left:auto;font-weight:400;color:var(--doux);font-size:13px;white-space:nowrap}
+details p{margin:4px 0 6px 16px;font-size:14px;color:var(--doux)}
+details ul{margin:0 0 4px 16px;padding:0;list-style:none;font-size:14px}
+details li{padding:2px 0}
+code{font:600 13.5px/1.4 ui-monospace,Consolas,monospace;color:var(--ambre);overflow-wrap:anywhere}
+ol.etapes,ul.flux{margin:10px 0 0;padding:0;list-style:none;counter-reset:e}
+ol.etapes li,ul.flux li{counter-increment:e;display:grid;grid-template-columns:2em minmax(0,1fr);gap:6px;padding:7px 6px;border-radius:8px;cursor:pointer;font-size:14px}
+ol.etapes li::before{content:counter(e);font:600 16px Kanit,sans-serif;color:var(--doux)}
+ul.flux li::before{content:"⇢";color:var(--ambre);font-weight:700}
+ol.etapes li.ici,ul.flux li.ici{background:var(--carte2)}
+ol.etapes li.ici::before{color:var(--rose)}
+ol.etapes li.fait::before{color:var(--teal)}
+.grand{font:600 20px/1.3 Kanit,sans-serif;margin:6px 0 4px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 2px}
+.nav button[disabled]{opacity:.4;cursor:default}
+.pied{display:grid;grid-template-columns:repeat(auto-fit,minmax(15em,1fr));gap:18px 28px;color:var(--doux);font-size:14px;border-top:1px solid var(--ligne)}
+.pied h2{color:var(--ink);font-size:18px}
+.pied p{margin:0}
+.cle{display:inline-block;width:26px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+@media (max-width:900px){.grille{grid-template-columns:minmax(0,1fr)}aside{position:static;max-height:none}.tete{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:600px){.couche{grid-template-columns:minmax(0,1fr);gap:4px;margin-bottom:22px}.etiq{text-align:center}.rang{gap:10px}.bloc{padding:8px 9px}.bloc .role{font-size:13px}.bloc .puces{display:none}.bloc .nom{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="band tete">
+  <div>
+    <h1>Forward To The Past, <b>le code en couches</b></h1>
+    <p>75 fichiers Python : app.py et 11 dossiers. Les appels descendent d'une couche à l'autre et ne remontent jamais.
+      Survolez ou touchez un bloc pour voir son rôle, ses fichiers et ses fonctions principales.</p>
+  </div>
+  <div class="modes" role="group" aria-label="Affichage">
+    <button id="m-appels" aria-pressed="true">Dossiers et appels</button>
+    <button id="m-flux" aria-pressed="false">Flux de données</button>
+    <button id="m-trajet" aria-pressed="false">Trajet d'un ❤️</button>
+  </div>
+</header>
+<main class="band grille">
+  <section class="schema" id="schema" aria-label="Schéma de l'architecture"><svg id="fils" aria-hidden="true"></svg></section>
+  <aside id="panneau" aria-live="polite"></aside>
+</main>
+<section class="band pied">
+  <div><h2>Lire le schéma</h2>
+    <p><span class="cle" style="border-color:var(--violet)"></span>un dossier en importe un autre (flèche vers celui qui est appelé)</p>
+    <p><span class="cle" style="border-color:var(--rose)"></span>appels du bloc choisi · <span class="cle" style="border-color:var(--teal)"></span>ceux qui l'appellent</p>
+    <p><span class="cle" style="border-color:var(--ambre);border-top-style:dashed;border-top-width:3px"></span>données qui circulent (mode « Flux »)</p></div>
+  <div><h2>Deux appels en travers</h2>
+    <p><code>interface → etat</code> : une carte film porte ses boutons ❤️ ➕ 🤮. <code>interface → moteur</code> : une carte affiche « Pourquoi ce film ». Aucune boucle d'imports (vérifié sur les 75 fichiers).</p></div>
+  <div><h2>Pour aller plus loin</h2>
+    <p><code>LISEZMOI_CODE.md</code> : « je veux modifier… → fichier », glossaire, règles à respecter. <code>BUGS_ET_RISQUES.md</code> : points connus, non corrigés.</p></div>
+</section>
+<script type="application/json" id="donnees">{"fichiers":{"app":[{"n":"app.py","l":104,"r":"Forward To The Past · ciné-club. Lancer avec : python -m streamlit run app.py","f":[["etat_initial","Valeurs de départ de la session : détection mobile au premier chargement, page d'accueil."],["entete","Bandeau du haut : logo, interrupteur Mobile, bouton Admin, puis menu des pages et compte du membre."],["main","Point d'entrée : thème, catalogue, base (démo créée si vide), contexte, puis la page demandée."]]}],"config":[{"n":"__init__.py","l":5,"r":"Configuration : valeurs fixes de l'app (réglages, libellés, chemins). Aucun calcul ici.","f":[]},{"n":"acces.py","l":10,"r":"Accès et sécurité des écrans de connexion : nombre d'essais, durée de blocage, code admin de démonstration.","f":[]},{"n":"affichage.py","l":44,"r":"Constantes d'affichage partagées : emoji des genres, libellés des décennies, boutons de réaction, couleurs.","f":[]},{"n":"avatars.py","l":36,"r":"Galerie d'avatars d'origine : catégories, libellés, avatar par défaut, anciennes clés des versions précédentes.","f":[]},{"n":"catalogue.py","l":27,"r":"Paramètres du catalogue de films (fichier CSV) : nom, emplacements possibles, colonnes obligatoires, libellés.","f":[]},{"n":"chemins.py","l":17,"r":"Emplacements des dossiers et adresses web de l'app, calculés une fois depuis la racine du projet.","f":[]},{"n":"donnees.py","l":16,"r":"Constantes de la base de données : sécurité des mots de passe, types d'interactions, tranches d'âge, lieux.","f":[]},{"n":"gamification.py","l":8,"r":"Niveaux de la gamification : (points d'expérience minimum, titre du niveau).","f":[]},{"n":"libelles.py","l":43,"r":"Libellés et listes de choix des écrans : préférences, tris, onglets, humeurs, sauts dans le temps, étapes…","f":[]},{"n":"messages.py","l":16,"r":"Messages (toasts) affichés après une réaction ❤️ ➕ 🤮 ou « déjà vu » : (type, ajouté ?) → (icône, texte).","f":[]},{"n":"reglages_moteur.py","l":67,"r":"Réglages du moteur de recommandation : valeurs d'usine, curseurs de l'admin, profils prêts à l'emploi.","f":[]}],"demo":[{"n":"__init__.py","l":14,"r":"Démonstration : 180 membres fictifs et 8 comptes de démo, pour que l'app soit vivante dès le premier lancement.","f":[]},{"n":"generation.py","l":349,"r":"Génère des membres fictifs cohérents pour la démo (préférences, j'aime, notes, liste, connexions).","f":[["generer","Crée `nb` membres fictifs et toute leur activité. L'ordre des étapes fixe l'ordre des tirages au"],["main","Commande terminal : vérifie le catalogue et la base, génère les membres et affiche le bilan."]]},{"n":"profils.py","l":87,"r":"Données de démonstration : comptes de démo, prénoms, noms, villes, « tribus » de goûts, avis types.","f":[]}],"donnees":[{"n":"__init__.py","l":5,"r":"Données : base SQLite (un fichier par table ou sujet) et lecture du catalogue CSV.","f":[]},{"n":"base.py","l":132,"r":"Base SQLite : emplacement du fichier, structure des tables, ouverture des connexions, lectures libres.","f":[["maintenant","Date et heure actuelles au format de la base (« AAAA-MM-JJ HH:MM:SS »)."],["connexion","Ouvre la base SQLite le temps d'un bloc `with` : valide si tout va bien, annule sinon."],["initialiser","Crée les tables si besoin et met à niveau une base d'une version précédente."],["nb_membres","Nombre de comptes enregistrés (réels et fictifs)."],["requete","Lecture seule pour les statistiques admin."]]},{"n":"carnet.py","l":40,"r":"Carnet de séance (table seances) : date, lieu, note et avis d'un film vu ; une séance vaut « déjà vu » pour le moteur.","f":[["seances","{tconst: {date_seance, lieu, note, avis}} du plus récent au plus ancien."],["enregistrer_seance","Ajoute ou met à jour une séance ; elle vaut « vu » et, si notée, une note pour le moteur."],["retirer_seance","Supprime la séance d'un film et les « vu » / notes ajoutés par le carnet."]]},{"n":"catalogue.py","l":192,"r":"Catalogue de films : recherche du fichier CSV, contrôle et nettoyage des colonnes, index (genres, personnes, résumés TF-IDF) et recherche par titre ou par nom.","f":[["chemin_csv","Chemin explicite (FTTP_CATALOGUE), puis dossier data/ du projet, puis Drive officiel."],["Catalogue","Le catalogue en mémoire : le tableau des films et, pour le moteur, des colonnes prêtes au calcul"],["lire_catalogue","Lit et contrôle le CSV (colonnes, clés IMDb) puis construit le Catalogue."]]},{"n":"interactions.py","l":68,"r":"Avis des membres (table interactions) : ❤️ j'aime, 🤮 pas pour moi, ➕ à voir, déjà vu, notes.","f":[["interactions","{type: {tconst: valeur}} pour un membre."],["basculer","Active/désactive une interaction. Retourne True si elle est maintenant active."],["noter","Enregistre, remplace ou efface (note=None) la note d'un membre pour un film."],["toutes_interactions","Toutes les interactions (pour le filtrage collaboratif et les stats admin)."],["version_communaute","Empreinte légère qui change dès qu'une interaction est ajoutée ou retirée (clé de cache)."]]},{"n":"journal.py","l":20,"r":"Journal d'activité (table evenements) : connexions, recherches, fiches ouvertes, actions de l'admin.","f":[["journaliser","Ajoute un événement au journal d'activité (détail converti en JSON si besoin)."]]},{"n":"membres.py","l":168,"r":"Membres (tables utilisateurs et preferences) : inscription, connexion, profil, goûts déclarés, export et suppression RGPD, comptes de démonstration.","f":[["creer_membre","Crée un compte avec ses préférences et ses coups de cœur ; renvoie son identifiant."],["email_existe","Vrai si un compte utilise déjà cette adresse (sans tenir compte des majuscules)."],["authentifier","Vérifie e-mail + mot de passe ; renvoie l'identifiant du membre ou None."],["membre","Fiche complète d'un membre (dictionnaire), ou None s'il n'existe pas."],["modifier_membre","Met à jour les champs autorisés du profil (prénom, pseudo, avatar…) ; ignore les autres."],["changer_mdp","Remplace le mot de passe si l'ancien est correct ; renvoie True si c'est fait."],["supprimer_membre","Droit à l'effacement (RGPD art. 17) : supprime le membre, ses préférences et interactions."],["export_membre","Droit d'accès / portabilité (RGPD art. 15 et 20) : toutes les données du membre, hors hash."],["ecrire_preferences","Écrit (ou remplace) les préférences d'un membre dans une connexion déjà ouverte."],["enregistrer_preferences","Enregistre les préférences modifiées depuis le profil et le note au journal."],["preferences","Préférences déclarées d'un membre (valeurs « indifférent » s'il n'en a pas)."],["membres_demo","Les 8 comptes de démonstration proposés sur la page d'accueil publique."],["connecter_demo","Connexion en un clic, réservée aux comptes de démonstration (est_demo = 1)."],["liste_pour_selection","Tous les membres pour les listes déroulantes de l'admin : comptes démo d'abord, puis réels, puis fictifs."]]},{"n":"reglages.py","l":36,"r":"Réglages du moteur enregistrés par l'admin (table parametres) : lecture, écriture, date de modification.","f":[["lire_parametres","Réglages du moteur enregistrés par l'admin, complétés par les valeurs par défaut."],["ecrire_parametres","Enregistre les réglages du moteur et le note au journal."],["date_parametres","Date du dernier enregistrement des réglages, ou None."]]},{"n":"securite.py","l":39,"r":"Mots de passe : empreinte PBKDF2-SHA256 (600 000 itérations, sel unique — recommandation OWASP), vérification, robustesse.","f":[["hacher","Empreinte PBKDF2-SHA256 salée du mot de passe (le mot de passe n'est jamais stocké)."],["verifier","Vrai si le mot de passe correspond à l'empreinte stockée (comparaison à temps constant)."],["robustesse","Score 0-4 et libellé, pour la jauge à l'inscription."]]}],"etat":[{"n":"__init__.py","l":5,"r":"État de l'app : cache, contexte de la page, actions des boutons, navigation, gamification.","f":[]},{"n":"actions.py","l":71,"r":"Actions des boutons (callbacks) : ❤️ ➕ 🤮 vu, note, carnet de séance, et messages (toasts) qui les confirment.","f":[["annoncer","Met un toast en file d'attente. Un callback ne doit rien afficher lui-même : pendant la relance"],["afficher_toasts","Affiche puis vide les messages en attente (posés par annoncer pendant un clic)."],["basculer","Ajoute ou retire une réaction (❤️, ➕, 🤮, vu) pour le membre connecté, avec message."],["noter","Enregistre la note choisie avec les étoiles (0 à 4 à l'écran → 1 à 5 en base)."],["enregistrer_seance","Enregistre la séance saisie dans le carnet (date, lieu, note, avis)."],["retirer_seance","Retire la séance d'un film du carnet du membre connecté."]]},{"n":"cache.py","l":66,"r":"Chargements mis en mémoire (cache Streamlit) : catalogue de films, communauté des membres, réglages du moteur.","f":[["catalogue","Catalogue prêt à l'emploi : CSV du dossier data/, sinon fichier déposé par l'utilisateur ;"],["communaute","Données communautaires à jour (recalculées seulement si les interactions ont changé)."],["parametres","Réglages actuels du moteur."]]},{"n":"contexte.py","l":61,"r":"Contexte d'une exécution de page (Ctx) : catalogue, communauté, réglages, affichage mobile, et le membre connecté (fiche, préférences, avis, profil moteur, carnet). Construit une fois au début de chaque affichage.","f":[["Ctx","Tout ce dont une page a besoin, construit une fois par affichage : catalogue, communauté, réglages,"],["construire","Construit le contexte de la page ; déconnecte si le compte a été supprimé entre-temps."]]},{"n":"gamification.py","l":48,"r":"Gamification : points d'expérience (XP), niveau atteint et badges avec leur progression.","f":[["xp","Points d'expérience : 50 au départ + points par réaction, note, vu et connexion (plafonnée)."],["niveau","(numéro, titre, progression vers le niveau suivant 0-1, points restants)."],["badges","Badges avec progression : icône, titre, condition, valeur atteinte, objectif."]]},{"n":"navigation.py","l":36,"r":"Navigation entre les écrans (mémorisée dans la session) : aller à une page, ouvrir une fiche film, revenir, se déconnecter.","f":[["ouvrir_fiche","Ouvre la fiche d'un film en retenant la page d'où l'on vient (pour « Retour »)."],["aller","Change de page et ferme la fiche ouverte."],["retour","Bouton « ← Retour » de la fiche film : revient à la page d'où elle a été ouverte."],["deconnecter","Oublie le membre et les étapes en cours, puis revient à l'accueil."]]}],"interface":[{"n":"__init__.py","l":6,"r":"Interface : tout ce qui se voit à l'écran — thème CSS (dossier style/) et briques réutilisables (cartes, tuiles, barres, jaquettes, graphiques, Time Circuits). Elles dessinent, elles ne décident pas.","f":[]},{"n":"barres.py","l":32,"r":"Barres de répartition colorées avec légende (« recette » du moteur, goûts d'un membre) et pastilles de goûts.","f":[["barre","Barre de répartition colorée + légende (« recette » du moteur, goûts d'un membre)."],["gouts_html","Puces « genre + pourcentage » des 5 goûts principaux (vide s'il n'y en a pas)."]]},{"n":"cartes.py","l":95,"r":"Cartes film (affiche, réactions ❤️ ➕ 🤮, score, chiffres) et grilles de cartes ; ligne compacte de « Mes films ».","f":[["reactions","Ligne « année · genre » + boutons ❤️ ➕ 🤮 (clé des boutons : <prefixe>_<type>_<suffixe>). Carte et fiche film."],["carte","Carte d'un film : jaquette cliquable, note, entrées, raison de la recommandation et boutons de réaction"],["grille","Rangée de cartes ; message « Rien à afficher » si la liste est vide."],["ligne_film","Carte-ligne : un clic ouvre la fiche, la corbeille (en bas à droite) retire le film de la liste."]]},{"n":"cartes_membres.py","l":35,"r":"Cartes membres (« Qui passe la séance ce soir ? », jumeaux ciné) et galerie d'avatars cliquable.","f":[["carte_membre_html","Carte d'un membre ou d'un avatar (image, nom, pseudo, genres, mention)."],["carte_membre_cliquable","Carte HTML recouverte d'un bouton invisible qui déclenche `rappel(*args)`."],["grille_avatars","Grille des avatars d'une catégorie ; un clic appelle `rappel(cle_avatar)`."]]},{"n":"graphes.py","l":30,"r":"Thème Plotly commun : lisible d'abord (marges automatiques, textes contrastés, grilles discrètes).","f":[["theme","Applique le thème néon commun (fond, police, marges, légende, info-bulles) à un graphique."]]},{"n":"jaquettes.py","l":32,"r":"Bandes de jaquettes non cliquables, avec pastilles (🆕, ↑2, ✅…) : aperçus et tests de l'admin.","f":[["jaquettes","Bande de jaquettes non cliquables, avec pastille (🆕, ↑2, ✅…) et classe CSS par film."]]},{"n":"mise_en_page.py","l":44,"r":"Éléments de mise en page : titre de section (avec sous-titre) et grande bannière d'accueil (DeLorean).","f":[["section","Titre de rubrique avec sous-titre facultatif."],["banniere","Grande bannière d'en-tête de page (pastille, titre sur deux lignes, texte)."],["colonnes","Colonnes sur ordinateur, blocs empilés sur mobile."],["selon_ecran","Choisit la valeur adaptée à l'écran : valeurs = (ordinateur, mobile), par exemple FILMS_PAR_RANGEE = (4, 2)."]]},{"n":"textes.py","l":57,"r":"Petits morceaux de texte et de HTML des films : logo, année · genre · durée, note, origine, étoiles, résumé court.","f":[["logo_html","Logo texte du bandeau."],["meta_film","Ligne courte « année · genre · durée » d'un film (éléments inconnus omis)."],["note_txt","Note au format français « 7,4 » (vide si inconnue)."],["origine_txt","Libellé de l'origine de production (ex. « France », « Coproduction »)."],["etoiles","Note de 0 à 5 dessinée en étoiles pleines et vides."],["resume_court","« Réalisé par … », ou à défaut le titre original."],["balise_affiche","Balise <img> d'une affiche (le titre est gardé dans data-t) ; « paresseuse » = chargée seulement quand visible."]]},{"n":"theme.py","l":60,"r":"Thème visuel « Vice ciné-club 88 MPH » : assemble le CSS de l'app à partir des fichiers de interface/style/.","f":[["style","CSS injecté dans le flux principal (un st.html « style seul » irait dans le conteneur d'événements,"],["injecter_theme","Injecte le CSS de base, plus le CSS mobile et le cadre de téléphone si besoin."]]},{"n":"time_circuits.py","l":59,"r":"Time Circuits de la DeLorean (88 MPH › Convecteur) : trois rangées d'afficheurs DESTINATION / PRESENT / LAST TIME DEPARTED.","f":[["moment","Une date au format des Time Circuits : NOV 22 1984 · PM · 08:41."],["circuits_temps","Les trois rangées des Time Circuits. rang : couleur (r/v/a), plaque, apres (moment), avant (moment, optionnel),"]]},{"n":"tuiles.py","l":28,"r":"Tuiles de chiffres : tuile simple (Mon Rewind, carnet), carte KPI et tuile de score de l'admin.","f":[["tuile","Tuile de chiffre clé : titre, grande valeur, détail."],["tuile_kpi","Carte KPI : même structure pour toutes (titre / valeur / pastille) → textes alignés d'une carte à l'autre."],["tuile_score","Tuile de score de l'admin (qualité, simulation) : titre, grande valeur, puis lignes de détail (HTML déjà prêt)."]]}],"medias":[{"n":"__init__.py","l":5,"r":"Médias : images de l'app (avatars des membres, affiches des films).","f":[]},{"n":"affiches.py","l":25,"r":"Affiches des films : image locale (static/affiches, fonctionne sans internet) sinon serveur d'images TMDB.","f":[["affiches_locales","Noms des jaquettes présentes dans static/affiches (ensemble vide si le dossier manque)."],["url_affiche","Affiche locale vérifiée (static/affiches, fonctionne hors-ligne) sinon serveur d'images TMDB."]]},{"n":"avatars.py","l":177,"r":"Galerie d'avatars façon « Qui regarde ? » de Netflix, extensible depuis l'espace admin.","f":[["catalogue","{clé: {libelle, categorie, actif}} dans l'ordre d'affichage (actifs seulement par défaut)."],["enregistrer_meta","Écrit la description des avatars et vide les caches correspondants."],["categories","Catégories d'avatars présentes, dans l'ordre prévu puis les nouvelles par ordre alphabétique."],["par_categorie","Clés des avatars d'une catégorie (toutes si None ou « Tous »)."],["cle_valide","Clé d'avatar existante : convertit les anciennes clés, sinon avatar par défaut."],["nom","Libellé lisible d'un avatar."],["url","Adresse web de l'image d'un avatar."],["data_uri","Image de l'avatar intégrée au HTML (miniature si elle existe) ; vide si illisible."],["img","Balise <img> carrée d'un avatar, à la taille demandée."],["decouper_planche","Découpe une planche de portraits en cases, en repérant les coutures entre images."],["importer_planche","Découpe, enregistre les 6 avatars et les ajoute au catalogue. Retourne les nouvelles clés."],["apercu_planche","Aperçu du découpage d'une planche avant import (même découpage que l'import)."]]}],"moteur":[{"n":"__init__.py","l":23,"r":"Moteur de recommandation 2.0 du ciné-club Forward To The Past.","f":[]},{"n":"communaute.py","l":73,"r":"Filtrage collaboratif : matrice membres × films des « j'aime », films aimés par les mêmes membres, membres aux goûts proches (« jumeaux ciné »), tendances des 30 derniers jours.","f":[["Communaute","Matrice membres × films des « j'aime » (j'aime + notes ≥ 4)."]]},{"n":"evaluation.py","l":120,"r":"Évaluation hors-ligne du moteur (onglet admin « Qualité du moteur ») : on cache 20 % des films aimés de chaque membre et on mesure si le moteur les retrouve, comparé à « les plus populaires » et « au hasard ».","f":[["evaluer","Cache 20 % des films aimés de chaque membre et mesure si le moteur les retrouve dans son top k."]]},{"n":"explications.py","l":133,"r":"Explications « Pourquoi ce film ? » : traduit les critères qui ont le plus pesé en phrases lisibles (« 🎭 Même genre : Comédie », « 🌟 Avec Jean Reno »…), de la plus forte à la plus faible contribution.","f":[["pourquoi","Raisons lisibles, de la plus forte à la plus faible contribution."]]},{"n":"profil_membre.py","l":117,"r":"Profil d'un membre pour le moteur : goûts déclarés à l'inscription + signaux laissés dans l'app (❤️, notes, ➕, 🤮), avec plus de poids pour les actions récentes ; répartition de ses goûts par genre.","f":[["Profil","Le membre vu par le moteur : préférences déclarées et signaux laissés dans l'app"],["profil_membre","Construit le profil à partir des préférences déclarées et des interactions {type: {tconst: valeur}}."],["poids_recence","Poids 1 pour l'action la plus récente, divisé par 2 toutes les « 40 / réactivité » actions (0 = pas d'effet)."],["gouts","Répartition des goûts du membre par genre (somme = 1) : déclarés + signaux récents − « pas pour moi »."]]},{"n":"recommandation.py","l":222,"r":"Les deux modes du moteur. « Tu as aimé X ? » (similaires : film → films proches) et « Pour toi » (pour_toi : membre → films). Chaque critère vaut entre 0 et 1 ; les réglages de l'admin sont des poids (0 à 10).","f":[["Resultat","Résultat d'une recommandation : films choisis, score de chaque film du catalogue, valeur de chaque critère"],["credit_commun","Bonus de chaque film selon les personnes (acteurs ou réalisateurs) qu'il partage avec la liste `ids` ;"],["similaires","« Tu as aimé X ? » : note chaque film selon sa ressemblance avec le film i, puis sélectionne."],["pour_toi","« Pour toi » : chaque critère donne une note entre 0 et 1 à chaque film pour ce membre ; le score est"]]},{"n":"selection.py","l":95,"r":"Classement final d'une recommandation : pertinence, diversité (méthode MMR : pas 10 films quasi identiques), calibrage sur les proportions de goûts du membre, et règle « un autre volet de la saga ».","f":[["selectionner","Classement final : pertinence, diversité (MMR) et, en mode membre, calibrage sur les proportions de goûts."]]}],"outils":[{"n":"__init__.py","l":5,"r":"Outils : petites fonctions pures (texte, calcul) sans dépendance au reste du projet.","f":[]},{"n":"calcul.py","l":30,"r":"Petits calculs numériques réutilisés par le moteur et les données de démo.","f":[["proximite","1 quand la valeur égale la référence, puis décroît jusqu'à 0 à « ecart_max » d'écart (NaN → 0)."],["ramener_entre_0_et_1","Divise par le maximum (le meilleur vaut 1) ; « exclure » met d'abord ces positions à 0."],["rang_percentile","Rang de chaque valeur entre 0 et 1 (1 = la plus grande), ex-aequo au rang moyen."]]},{"n":"texte.py","l":50,"r":"Petites fonctions de texte réutilisées partout (aucune dépendance au reste du projet).","f":[["normaliser","Texte comparable : minuscules, sans accents ni ponctuation (« Élan & Co » → « elan co »)."],["format_entrees","Nombre d'entrées lisible : 950 → « 950 », 12 500 → « 12 k », 1 250 000 → « 1,2 M »."],["date_fr","Date ISO « 2026-02-03 » → « 03/02/2026 » (texte vide si la date est absente ou incomplète)."],["annee_ou_vide","Année en texte (« 1985 »), ou chaîne vide si elle est inconnue (NaN)."],["annee_entre_parentheses","« (1985) » précédé d'une espace, pour écrire « Titre (1985) » ; rien si l'année est inconnue (NaN)."],["annee_txt","Année d'un film en texte, ou « — » si elle est inconnue (NaN)."],["nombre_fr","Nombre avec espace pour les milliers : 7356 → « 7 356 »."]]}],"recherche":[{"n":"__init__.py","l":45,"r":"Recherche prédictive (titre, vignette, année) : petit composant HTML/JS sans dépendance.","f":[["champ","Affiche la barre de recherche ; renvoie le choix de l'utilisateur une seule fois (sinon None)."],["premier","Position du meilleur film pour ce texte, ou None."]]},{"n":"index.py","l":50,"r":"Index de la recherche prédictive : exporte une fois le catalogue (films triés par popularité + personnes) en JSON dans static/, pour que le navigateur filtre à chaque lettre sans relancer la page.","f":[["fichier_index","Fichier d'index du champ de recherche, recréé seulement si le catalogue change."]]}],"vues":[{"n":"__init__.py","l":6,"r":"Vues : une page de l'app par fichier (accueil, explorer, fiche, 88 MPH, mes films, profil, connexion / inscription) et le dossier admin. Chaque page assemble les briques d'interface et le moteur.","f":[]},{"n":"accueil.py","l":157,"r":"Page « Pour toi » (accueil du membre) : bannière puis rubriques de recommandations en grilles de 4 (sélection perso, parce que tu as aimé, tendances, jumeau ciné, décennie, pépites, cinéma français, sagas).","f":[["afficher","Page d'accueil : bannière, puis chaque rubrique l'une sous l'autre (une rubrique vide ne s'affiche pas)."]]},{"n":"auth.py","l":316,"r":"Accueil public, connexion et inscription en 5 étapes (façon Spotify + Netflix).","f":[["afficher","Accueil public : bannière, comptes de démo, connexion et inscription (ou l'assistant en cours)."],["assistant","Assistant d'inscription : barre d'étapes puis l'étape en cours (5 étapes)."]]},{"n":"explorer.py","l":121,"r":"Explorer : recherche (titre, acteur, réalisateur), filtres et tri — dont « Pour toi ».","f":[["afficher","Page Explorer : champ de recherche, filtres, tri, puis la grille paginée (« Charger N films de plus »)."]]},{"n":"fiche.py","l":135,"r":"Fiche film en pleine page (style V8) : affiche, réactions, infos, carnet de séance, « pourquoi », films proches.","f":[["afficher","Fiche d'un film : retour, affiche + réactions, infos + carnet, « Pourquoi ce film ? », films similaires."]]},{"n":"machine.py","l":224,"r":"Machine à remonter le temps : « Tu as aimé… ? », destination année, convecteur temporel.","f":[["afficher","Page 88 MPH : 3 onglets (Tu as aimé… ?, Destination année, Convecteur temporel)."]]},{"n":"mes_films.py","l":161,"r":"Mes films : carnet de séance, favoris, à voir, pas pour moi — lignes compactes, recherche, filtre et tri.","f":[["afficher","Page Mes films : carnet de séance puis un onglet par liste (favoris, à voir, pas pour moi)."]]},{"n":"profil.py","l":266,"r":"Profil : en-tête avec grand avatar, Mon Rewind, jumeaux ciné, badges, préférences, avatar, infos, RGPD.","f":[["afficher","Page Profil : en-tête (niveau, XP), Mon Rewind, jumeaux ciné, badges, puis 4 onglets de réglages."]]}],"vues_admin":[{"n":"__init__.py","l":55,"r":"Espace admin (accès par code) : statistiques des membres, réglages vulgarisés du moteur, qualité, avatars, journal & base. Ce fichier aiguille vers un fichier par onglet.","f":[["afficher","Espace admin : écran de connexion, puis en-tête et les 6 onglets."]]},{"n":"chargement.py","l":36,"r":"Espace admin › chargement des données de la base en tableaux (membres, avis, journal, préférences, séances) et filtre « membres réels seulement ».","f":[["charger","Lit en une fois tout ce qu'affichent les onglets : membres, interactions, événements, préférences, séances."],["filtrer","Mêmes données limitées aux membres réels (sauf si les fictifs sont inclus)."]]},{"n":"comparaison.py","l":32,"r":"Espace admin › comparaison de deux classements : pastilles 🆕 nouveau, ↑ monte, ↓ descend, et bilan chiffré.","f":[["comparer_classements","Pastilles 🆕 / ↑ / ↓ du classement « après » comparé à « avant »."],["bilan_html","Puces « nouveaux / montent / descendent / identiques » d'une comparaison de classements."]]},{"n":"connexion.py","l":57,"r":"Espace admin › écran du code d'accès (5 essais puis 60 s d'attente) et mot de passe attendu.","f":[["mdp_attendu","Mot de passe admin : secrets.toml > variable d'environnement > « 007 » (démo)."],["afficher","Écran « Accès réservé » : saisie du mot de passe admin, blocage après trop d'essais."]]},{"n":"onglet_avatars.py","l":56,"r":"Espace admin › onglet 🖼️ Avatars : import d'une planche 3 × 2 découpée automatiquement, renommer, classer, masquer.","f":[["afficher","Onglet 🖼️ Avatars : import d'une planche découpée automatiquement, galerie, renommage."]]},{"n":"onglet_journal.py","l":56,"r":"Espace admin › onglet 📜 Journal & base : journal d'activité filtrable, taille de la base, copie téléchargeable, régénération des membres fictifs (démo).","f":[["afficher","Onglet 📜 Journal : derniers événements filtrables et régénération des membres fictifs."]]},{"n":"onglet_membres.py","l":119,"r":"Espace admin › onglet 👥 Membres : tableau filtrable, export CSV, fiche détaillée d'un membre (goûts, recommandations actuelles, export RGPD, suppression).","f":[["afficher","Onglet complet : filtres, tableau des membres (une ligne cliquable par membre), export, puis le détail."]]},{"n":"onglet_qualite.py","l":105,"r":"Espace admin › onglet 🧪 Qualité du moteur : test hors-ligne (on cache 20 % des films aimés), scores, graphique, exemple concret pour un membre, puis simulation « le membre a-t-il la main ? ».","f":[["afficher","Onglet 🧪 Qualité : explication en 3 étapes, test du moteur, résultats et exemple concret."]]},{"n":"onglet_reglages.py","l":164,"r":"Espace admin › onglet 🎛️ Réglages du moteur : recette du moteur, profils prêts à l'emploi, curseurs rangés en cartes, brouillon / enregistrement, et aperçu en direct (réglages enregistrés vs brouillon).","f":[["lire_brouillon","Réglages en cours de modification (pas encore enregistrés)."],["afficher","Onglet 🎛️ Réglages : recette en un clic, cartes de réglages, enregistrement, aperçu."]]},{"n":"onglet_vue_ensemble.py","l":207,"r":"Espace admin › onglet 📊 Vue d'ensemble : 6 indicateurs clés et 9 graphiques sur les membres.","f":[["afficher","Onglet complet : interrupteur « membres fictifs », 6 indicateurs puis les graphiques, rangée par rangée."]]},{"n":"simulation.py","l":117,"r":"Espace admin › simulation sans rien enregistrer : on rejoue la sélection « Pour toi » d'un membre après une action fictive (aime 5 films, en rejette 5, change ses genres) et on mesure l'effet.","f":[["afficher","Simulation : choix d'un membre et d'une action, puis sélection avant / après, sans rien enregistrer."]]}]},"appels":[["app","demo"],["app","donnees"],["app","etat"],["app","interface"],["app","medias"],["app","vues"],["app","vues_admin"],["demo","config"],["demo","donnees"],["demo","medias"],["demo","outils"],["donnees","config"],["donnees","outils"],["etat","config"],["etat","donnees"],["etat","moteur"],["interface","config"],["interface","etat"],["interface","medias"],["interface","moteur"],["interface","outils"],["medias","config"],["moteur","config"],["moteur","donnees"],["moteur","outils"],["recherche","config"],["recherche","medias"],["vues","config"],["vues","demo"],["vues","donnees"],["vues","etat"],["vues","interface"],["vues","medias"],["vues","moteur"],["vues","outils"],["vues","recherche"],["vues_admin","config"],["vues_admin","demo"],["vues_admin","donnees"],["vues_admin","etat"],["vues_admin","interface"],["vues_admin","medias"],["vues_admin","moteur"],["vues_admin","outils"],["vues_admin","recherche"]]}</script>
+<script>
+{
+const D = JSON.parse(document.getElementById("donnees").textContent);
+const BLOCS = {
+  app: ["app.py", "Point d'entrée : bandeau, menu, choix de la page à afficher"],
+  vues: ["vues/", "Une page par fichier : accueil, explorer, fiche, 88 MPH, mes films, profil, connexion"],
+  vues_admin: ["vues/admin/", "Espace admin : connexion puis un fichier par onglet"],
+  interface: ["interface/", "Briques d'affichage : cartes, tuiles, barres, graphiques, thème CSS"],
+  recherche: ["recherche/", "Recherche prédictive : composant HTML/JS et son index"],
+  etat: ["etat/", "La session : cache, contexte de la page, actions des boutons, navigation, XP"],
+  demo: ["demo/", "Membres fictifs et comptes de démo, retirable"],
+  moteur: ["moteur/", "Les recommandations : profil, critères, sélection, explications, test"],
+  donnees: ["donnees/", "Lecture du catalogue CSV et accès à la base SQLite"],
+  medias: ["medias/", "Jaquettes des films et avatars des membres"],
+  config: ["config/", "Valeurs réglables : chemins, couleurs, libellés, réglages du moteur"],
+  outils: ["outils/", "Petites fonctions : texte, nombres, calculs entre 0 et 1"],
+  csv: ["data/ catalogue CSV", "Films IMDb + TMDB : lu au démarrage, jamais modifié"],
+  bdd: ["data/fttp.db", "Base SQLite : membres, goûts, avis, carnet, journal, réglages"],
+  statique: ["static/", "Jaquettes, avatars, polices, index de recherche écrit au démarrage"]
+};
+const COUCHES = [
+  ["Point d'entrée", ["app"]], ["Pages", ["vues", "vues_admin"]], ["Affichage", ["interface", "recherche"]],
+  ["Session", ["etat", "demo"]], ["Calculs", ["moteur"]], ["Données et images", ["donnees", "medias"]],
+  ["Valeurs et outils", ["config", "outils"]], ["Fichiers sur disque", ["csv", "bdd", "statique"]]
+];
+const FLUX = [
+  ["csv", "donnees", "Le CSV devient le Catalogue (donnees/catalogue.py), gardé en mémoire par etat/cache.py"],
+  ["donnees", "moteur", "Catalogue : colonnes et index prêts au calcul (années, genres, acteurs, résumés)"],
+  ["moteur", "vues", "Resultat : films choisis, score de chaque film, raisons « Pourquoi ce film ? »"],
+  ["bdd", "donnees", "Lectures et écritures SQL (donnees/base.py · connexion)", true],
+  ["donnees", "vues", "Membre, goûts, avis, carnet ; les clics y écrivent via etat/actions.py", true],
+  ["statique", "medias", "Adresses des jaquettes et des avatars servis par Streamlit"],
+  ["recherche", "statique", "Index de recherche (JSON) écrit au premier lancement"]
+];
+const TRAJET = [
+  [["interface"], "Le membre clique ❤️ sous une jaquette", "interface/cartes.py · reactions"],
+  [["etat"], "Le clic est traité avant de redessiner la page", "etat/actions.py · basculer"],
+  [["donnees", "bdd"], "La base enregistre le j'aime et retire un éventuel 🤮 ou ➕ du même film", "donnees/interactions.py · basculer"],
+  [["donnees", "etat"], "L'action est notée au journal ; un message « Ajouté à tes coups de cœur » attend", "donnees/journal.py · journaliser · etat/actions.py · annoncer"],
+  [["app"], "Streamlit relance l'app de haut en bas", "app.py · main"],
+  [["etat", "donnees"], "Une interaction a changé : la communauté se recalcule", "etat/cache.py · communaute"],
+  [["etat", "donnees"], "Le contexte relit le membre : goûts, avis, carnet", "etat/contexte.py · construire"],
+  [["moteur"], "Le profil intègre le nouveau film aimé, les actions récentes pèsent plus", "moteur/profil_membre.py · profil_membre"],
+  [["vues", "moteur"], "La page « Pour toi » redemande ses recommandations", "vues/accueil.py · afficher → pour_toi"],
+  [["moteur"], "Chaque critère note chaque film de 0 à 1, pondéré par les réglages de l'admin", "moteur/recommandation.py · _critere_…"],
+  [["moteur"], "Les meilleurs films sont choisis sans quasi-doublons", "moteur/selection.py · selectionner"],
+  [["interface", "moteur", "etat"], "Les cartes s'affichent avec leur raison, puis le message du clic", "interface/cartes.py · grille · moteur/explications.py · pourquoi"]
+];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
+const schema = document.getElementById("schema"), svg = document.getElementById("fils"), panneau = document.getElementById("panneau");
+const stats = id => { const f = D.fichiers[id] || []; return [f.length, f.reduce((a, x) => a + x.l, 0)]; };
+schema.insertAdjacentHTML("beforeend", COUCHES.map(([lib, ids], k) =>
+  `<div class="couche"><div class="etiq">${lib}</div><div class="rang">${ids.map(id => {
+    const [n, l] = stats(id), disque = !D.fichiers[id] && id !== "app";
+    const puces = (D.fichiers[id] || []).filter(f => f.n !== "__init__.py" || D.fichiers[id].length === 1).slice(0, 9).map(f => `<span>${esc(f.n.replace(".py", ""))}</span>`).join("");
+    return `<div class="bloc${disque ? " disque" : ""}" id="b-${id}" data-id="${id}" tabindex="0" role="button">
+      <div class="nom">${esc(BLOCS[id][0])}${n ? `<small>${n} fichier${n > 1 ? "s" : ""} · ${l} l.</small>` : ""}</div>
+      <div class="role">${esc(BLOCS[id][1])}</div>${puces ? `<div class="puces">${puces}</div>` : ""}</div>`;
+  }).join("")}</div>${k === COUCHES.length - 1 ? '<div class="sol"></div>' : ""}</div>`).join(""));
+
+let mode = "appels", choisi = "moteur", fluxVu = -1, etape = 0, minuteur = null;
+const boite = id => { const r = document.getElementById("b-" + id).getBoundingClientRect(), s = schema.getBoundingClientRect(); return {x: r.left - s.left, y: r.top - s.top, w: r.width, h: r.height}; };
+const centre = id => { const b = boite(id); return [b.x + b.w / 2, b.y + b.h / 2]; };
+function courbe(a, b, i, n, j, m) {
+  const A = boite(a), B = boite(b), haut = A.y + A.h <= B.y + 2, bas = B.y + B.h <= A.y + 2;
+  const xa = A.x + A.w * (i + 1) / (n + 1), xb = B.x + B.w * (j + 1) / (m + 1);
+  if (haut) { const y1 = A.y + A.h, y2 = B.y - 7, d = Math.max(24, (y2 - y1) / 2); return `M${xa},${y1} C${xa},${y1 + d} ${xb},${y2 - d} ${xb},${y2}`; }
+  if (bas) { const y1 = A.y, y2 = B.y + B.h + 7, d = Math.max(24, (y1 - y2) / 2); return `M${xa},${y1} C${xa},${y1 - d} ${xb},${y2 + d} ${xb},${y2}`; }
+  const gauche = A.x > B.x, x1 = gauche ? A.x : A.x + A.w, x2 = gauche ? B.x + B.w + 7 : B.x - 7, y = A.y + A.h / 2;
+  return `M${x1},${y} C${(x1 + x2) / 2},${y} ${(x1 + x2) / 2},${B.y + B.h / 2} ${x2},${B.y + B.h / 2}`;
+}
+function ports(aretes) {
+  const cote = (id, autre) => (boite(id).y < boite(autre).y ? "b" : "h"), p = {};
+  aretes.forEach(([a, b], k) => { [[a, b, 0], [b, a, 1]].forEach(([u, v, e]) => { const c = u + cote(u, v); (p[c] = p[c] || []).push([k, e, centre(v)[0]]); }); });
+  const r = aretes.map(() => [0, 1, 0, 1]);
+  Object.values(p).forEach(l => { l.sort((x, y) => x[2] - y[2]); l.forEach(([k, e], i) => { r[k][e * 2] = i; r[k][e * 2 + 1] = l.length; }); });
+  return r;
+}
+function dessiner() {
+  const W = schema.clientWidth, H = schema.clientHeight;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const fleche = (id, c) => `<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`;
+  let h = `<defs>${fleche("fv", "#8E7CC3")}${fleche("fr", "#DA4B84")}${fleche("ft", "#23E5FF")}${fleche("fa", "#F7B32B")}</defs>`;
+  const ap = D.appels, pa = ports(ap);
+  ap.forEach(([a, b], k) => {
+    let cl = "appel", m = "fv";
+    if (mode === "appels" && choisi) { if (a === choisi) { cl += " sort"; m = "fr"; } else if (b === choisi) { cl += " entre"; m = "ft"; } else cl += " cache"; }
+    if (mode !== "appels") cl += " cache";
+    h += `<path class="${cl}" d="${courbe(a, b, ...pa[k])}" marker-end="url(#${m})"/>`;
+  });
+  if (mode === "flux") {
+    const pf = ports(FLUX);
+    FLUX.forEach(([a, b, , deux], k) => { h += `<path class="flux${k === fluxVu ? " vu" : ""}" d="${courbe(a, b, ...pf[k])}" marker-end="url(#${k === fluxVu ? "ft" : "fa"})"${deux ? ` marker-start="url(#${k === fluxVu ? "ft" : "fa"})"` : ""}/>`; });
+  }
+  if (mode === "trajet") {
+    const pts = TRAJET.slice(0, etape + 1).map(t => centre(t[0][0]));
+    if (pts.length > 1) h += `<path class="trajet" d="M${pts.map(p => p.join(",")).join(" L")}"/>`;
+    h += `<circle class="jeton" r="9" cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}"/>`;
+  }
+  svg.innerHTML = h;
+}
+const voisins = id => [D.appels.filter(e => e[0] === id).map(e => e[1]), D.appels.filter(e => e[1] === id).map(e => e[0])];
+const nomBloc = id => BLOCS[id][0];
+function marquer(actifs, lies) {
+  document.querySelectorAll(".bloc").forEach(el => { const id = el.dataset.id;
+    el.classList.toggle("actif", actifs.includes(id) && !(mode === "flux" && fluxVu < 0)); el.classList.toggle("lie", lies.includes(id) && !actifs.includes(id));
+    el.classList.toggle("eteint", mode !== "appels" && !actifs.includes(id)); });
+}
+function panneauBloc(id) {
+  const [sort, entre] = voisins(id), f = D.fichiers[id] || [], [n, l] = stats(id);
+  panneau.innerHTML = `<h2>${esc(nomBloc(id))}</h2><p class="sous">${esc(BLOCS[id][1])}${n ? ` · ${n} fichier${n > 1 ? "s" : ""}, ${l} lignes` : ""}</p>
+    ${f.length || id === "app" ? `<p class="deps"><b class="r">Utilise</b> : ${sort.map(nomBloc).map(esc).join(", ") || "rien du projet"}</p>
+    <p class="deps"><b>Utilisé par</b> : ${entre.map(nomBloc).map(esc).join(", ") || "Streamlit (commande streamlit run app.py)"}</p>`
+    : FLUX.filter(x => x[0] === id || x[1] === id).map(x => `<p class="deps"><b>${x[3] ? "Lu et écrit par" : x[0] === id ? "Lu par" : "Écrit par"}</b> : ${esc(nomBloc(x[0] === id ? x[1] : x[0]))} — ${esc(x[2])}</p>`).join("")}
+    ${f.map((x, i) => `<details${i === 0 && f.length < 4 ? " open" : ""}><summary><code>${esc(x.n)}</code><span class="lg">${x.l} l.</span></summary>
+      <p>${esc(x.r)}</p>${x.f.length ? `<ul>${x.f.map(([nm, d]) => `<li><code>${esc(nm)}</code> ${esc(d)}</li>`).join("")}</ul>` : ""}</details>`).join("")}
+    ${f.length ? "" : `<p class="sous">Fichier de données, hors code : il n'est pas modifié par la consolidation.</p>`}`;
+  const lies = f.length || id === "app" ? [...sort, ...entre] : FLUX.filter(x => x[0] === id || x[1] === id).map(x => x[0] === id ? x[1] : x[0]);
+  marquer([id], lies);
+}
+function panneauFlux() {
+  panneau.innerHTML = `<h2>Ce qui circule</h2><p class="sous">Touchez un flux pour le suivre sur le schéma. Double flèche : lecture et écriture.</p>
+    <ul class="flux">${FLUX.map(([a, b, t, deux], k) => `<li tabindex="0" data-k="${k}" class="${k === fluxVu ? "ici" : ""}"><span><b>${esc(nomBloc(a))} ${deux ? "⇄" : "→"} ${esc(nomBloc(b))}</b><br>${esc(t)}</span></li>`).join("")}</ul>`;
+  marquer(fluxVu >= 0 ? [FLUX[fluxVu][0], FLUX[fluxVu][1]] : [...new Set(FLUX.flatMap(x => [x[0], x[1]]))], []);
+}
+function panneauTrajet() {
+  const t = TRAJET[etape];
+  panneau.innerHTML = `<h2>Trajet d'un ❤️ · étape ${etape + 1} sur ${TRAJET.length}</h2><p class="grand">${esc(t[1])}</p><p><code>${esc(t[2])}</code></p>
+    <div class="nav"><button id="t-prec"${etape ? "" : " disabled"}>Précédent</button><button id="t-suiv"${etape < TRAJET.length - 1 ? "" : " disabled"}>Suivant</button><button id="t-auto">${minuteur ? "Pause" : "Lecture"}</button></div>
+    <ol class="etapes">${TRAJET.map((x, k) => `<li tabindex="0" data-k="${k}" class="${k === etape ? "ici" : k < etape ? "fait" : ""}"><span>${esc(x[1])}</span></li>`).join("")}</ol>`;
+  marquer(t[0], []);
+}
+function rendre() {
+  ["appels", "flux", "trajet"].forEach(m => document.getElementById("m-" + m).setAttribute("aria-pressed", m === mode));
+  if (mode === "appels") panneauBloc(choisi); else if (mode === "flux") panneauFlux(); else panneauTrajet();
+  dessiner();
+}
+const changer = m => { mode = m; if (m !== "trajet") arreter(); rendre(); };
+const arreter = () => { clearInterval(minuteur); minuteur = null; };
+const aller = k => { etape = Math.max(0, Math.min(TRAJET.length - 1, k)); if (etape === TRAJET.length - 1) arreter(); rendre(); };
+["appels", "flux", "trajet"].forEach(m => document.getElementById("m-" + m).addEventListener("click", () => changer(m)));
+const versPanneau = () => { if (innerWidth <= 900) panneau.scrollIntoView({behavior: "smooth", block: "nearest"}); };
+schema.addEventListener("click", e => { const b = e.target.closest(".bloc"); if (!b) return; choisi = b.dataset.id; if (mode !== "appels") mode = "appels"; arreter(); rendre(); versPanneau(); });
+schema.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("bloc")) { e.preventDefault(); e.target.click(); } });
+schema.addEventListener("mouseover", e => { const b = e.target.closest(".bloc"); if (b && mode === "appels" && matchMedia("(hover:hover)").matches && b.dataset.id !== choisi) { choisi = b.dataset.id; rendre(); } });
+panneau.addEventListener("click", e => {
+  const li = e.target.closest("li[data-k]");
+  if (li && mode === "flux") { fluxVu = +li.dataset.k === fluxVu ? -1 : +li.dataset.k; rendre(); }
+  if (li && mode === "trajet") { arreter(); aller(+li.dataset.k); }
+  if (e.target.id === "t-prec") { arreter(); aller(etape - 1); }
+  if (e.target.id === "t-suiv") { arreter(); aller(etape + 1); }
+  if (e.target.id === "t-auto") { if (minuteur) { arreter(); rendre(); } else { if (etape === TRAJET.length - 1) etape = 0; minuteur = setInterval(() => aller(etape + 1), 1800); rendre(); } }
+});
+panneau.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("li[data-k]")) e.target.click(); });
+document.addEventListener("keydown", e => { if (mode === "trajet" && !e.target.closest("input")) { if (e.key === "ArrowRight") { arreter(); aller(etape + 1); } if (e.key === "ArrowLeft") { arreter(); aller(etape - 1); } } });
+const obs = new ResizeObserver(() => dessiner());
+obs.observe(schema);
+if (document.fonts) document.fonts.ready.then(dessiner);
+rendre();
+}
+</script>
+</body>
+</html>

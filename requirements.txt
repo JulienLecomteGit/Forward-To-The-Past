@@ -1,0 +1,8 @@
+# Forward To The Past · ciné-club — testé avec Streamlit 1.50.0 (Python 3.12 / 3.13)
+streamlit==1.50.0
+pandas>=2.2,<3
+numpy>=1.26,<3
+scipy>=1.11
+scikit-learn>=1.4,<2
+plotly>=5.22,<8
+Pillow>=10,<12

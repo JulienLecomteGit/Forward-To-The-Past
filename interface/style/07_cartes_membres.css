@@ -1,0 +1,21 @@
+/* ---------- cartes membres (Qui regarde ?, jumeaux, avatars) */
+.fm-carte{background:var(--ft-carte);border:1px solid var(--ft-ligne);border-radius:16px;padding:12px 12px 14px;text-align:center;
+ box-shadow:var(--ft-ombre);height:100%;transition:transform .2s ease,border-color .2s ease}
+.fm-carte img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block}
+.fm-nom{font-weight:800;font-size:1rem;margin-top:10px;color:var(--ft-texte);line-height:1.2}
+.fm-pseudo{font-size:.78rem;font-weight:700;color:var(--ft-teal);margin-top:3px}
+.fm-genres{font-size:.76rem;color:var(--ft-ambre);margin-top:4px;line-height:1.3}
+.fm-extra{display:inline-block;margin-top:8px;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(218,75,132,.16);color:#F3A9C7}
+.fm-carte.choisi{border:2px solid var(--ft-rose);box-shadow:0 0 0 4px rgba(218,75,132,.18),var(--ft-ombre)}
+.fm-carte.choisi .fm-nom::after{content:"  ✓";color:var(--ft-rose)}
+[class*="st-key-clic_"]{position:relative;gap:0!important;height:100%}
+[class*="st-key-clic_"]>.stElementContainer:first-child,[class*="st-key-clic_"]>.stElementContainer:first-child>div,
+[class*="st-key-gmembres_"]>.stElementContainer>div{height:100%}
+[class*="st-key-clic_"]:hover .fm-carte{transform:translateY(-3px);border-color:rgba(218,75,132,.5)}
+[class*="st-key-cliq_"]{position:absolute!important;inset:0;z-index:3;width:100%!important;margin:0!important}
+[class*="st-key-cliq_"] .stButton,[class*="st-key-cliq_"] .stButton>div,[class*="st-key-cliq_"] button{width:100%!important;height:100%!important;min-height:100%;opacity:0}
+[class*="st-key-gmembres_"]{flex-wrap:wrap!important;gap:16px!important;align-items:stretch!important}
+[class*="st-key-gmembres_"]>[data-testid="stLayoutWrapper"],[class*="st-key-gmembres_"]>.stElementContainer{flex:0 0 calc((100% - (var(--fm-col,4) - 1) * 16px) / var(--fm-col,4))!important;
+ width:calc((100% - (var(--fm-col,4) - 1) * 16px) / var(--fm-col,4))!important;min-width:0}
+.st-key-gmembres_avatars{--fm-col:8}.st-key-gmembres_rewind{--fm-col:6}.st-key-gmembres_avatars .fm-nom{font-size:.8rem;margin-top:7px}
+.st-key-gmembres_avatars .fm-carte{padding:8px 8px 10px}

@@ -1,0 +1,11 @@
+/* ---------- Destination année : cartes d'années alignées */
+.st-key-gmembres_annees{--fm-col:8}
+.fd-carte{height:100%;min-height:78px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:.25rem;
+ padding:.7rem .4rem;border-radius:14px;border:1px solid var(--ft-ligne);background:linear-gradient(180deg,#231945,#1A1236);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 4px 12px rgba(0,0,0,.25);transition:border-color .15s ease,transform .15s ease}
+.fd-annee{font:400 1.45rem/1 'Share Tech Mono',monospace;letter-spacing:.06em;color:#FF5A5A;text-shadow:0 0 8px rgba(255,90,90,.45)}
+.fd-film{font-size:.7rem;font-weight:600;color:var(--ft-doux);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.fd-carte.actif{background:rgba(218,75,132,.20);border-color:rgba(218,75,132,.75)}
+.fd-carte.actif .fd-film{color:#fff}
+.fd-carte.hasard .fd-annee{font-size:1.3rem;text-shadow:none}
+[class*="st-key-clic_saut"]:hover .fd-carte{border-color:rgba(218,75,132,.55);transform:translateY(-2px)}

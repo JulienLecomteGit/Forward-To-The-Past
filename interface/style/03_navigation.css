@@ -1,0 +1,14 @@
+/* ---------- barre du haut et navigation */
+.st-key-entete{align-items:center!important;gap:.7rem!important;margin-bottom:.9rem}
+.st-key-entete>[data-testid="stLayoutWrapper"],.st-key-entete>.stElementContainer{width:auto!important;flex:0 1 auto!important;min-width:0}
+.st-key-droite{width:auto!important;flex-wrap:nowrap!important;gap:.6rem!important}
+.ft-logo{font:800 .95rem 'Orbitron',sans-serif;letter-spacing:.08em;color:var(--ft-teal);white-space:nowrap}
+.ft-logo b{color:var(--ft-ambre)}
+.st-key-menu_membre{width:auto!important}
+.st-key-menu_membre [data-testid="stPopoverButton"]{padding:.2rem .8rem .2rem .3rem}
+.st-key-nav{gap:.6rem!important;margin:0 0 .6rem;flex-wrap:nowrap!important}
+.st-key-nav>div{flex:1 1 0!important;min-width:0}
+.st-key-nav .stButton,.st-key-nav button{width:100%!important}
+.st-key-nav button{min-height:44px}
+.ft-av-ligne{display:flex;align-items:center;gap:.6rem}
+.ft-avatar{border-radius:12px;object-fit:cover}

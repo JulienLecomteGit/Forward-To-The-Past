@@ -1,0 +1,45 @@
+/* ---------- pastilles en grille alignée (genres, décennies, humeurs) */
+.st-key-pf_genres,.st-key-i_genres,.st-key-pf_dec,.st-key-i_dec,.st-key-mc_humeur{width:100%!important}
+.st-key-pf_genres [data-baseweb="button-group"],.st-key-i_genres [data-baseweb="button-group"],.st-key-pf_dec [data-baseweb="button-group"],
+.st-key-i_dec [data-baseweb="button-group"]{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px!important;width:100%}
+.st-key-mc_humeur [data-baseweb="button-group"]{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px!important;width:100%}
+:is(.st-key-pf_genres,.st-key-i_genres,.st-key-pf_dec,.st-key-i_dec,.st-key-mc_humeur) button{width:100%!important;margin:0!important;
+ justify-content:center!important;border-radius:12px!important;min-height:42px!important;padding:.3rem .5rem!important}
+:is(.st-key-pf_genres,.st-key-i_genres,.st-key-pf_dec,.st-key-i_dec,.st-key-mc_humeur) button p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* choix uniques (durée, origine, style) : liste verticale alignée */
+:is(.st-key-pf_format,.st-key-pf_origine,.st-key-pf_style,.st-key-i_format,.st-key-i_origine,.st-key-i_style){width:100%!important}
+:is(.st-key-pf_format,.st-key-pf_origine,.st-key-pf_style,.st-key-i_format,.st-key-i_origine,.st-key-i_style) [data-baseweb="button-group"]{
+ display:grid!important;grid-template-columns:1fr;gap:6px!important;width:100%}
+:is(.st-key-pf_format,.st-key-pf_origine,.st-key-pf_style,.st-key-i_format,.st-key-i_origine,.st-key-i_style) button{width:100%!important;margin:0!important;
+ border-radius:10px!important;justify-content:flex-start!important;padding:.45rem .85rem!important;min-height:40px!important}
+/* ---------- ADN ciné */
+.fa-tete{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem}
+.fa-grille{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.3fr;gap:12px}
+.fa-bloc{background:#160F2D;border:1px solid var(--ft-ligne);border-radius:14px;padding:.8rem .95rem;min-width:0}
+.fa-lab{font:800 .64rem 'Orbitron',sans-serif;letter-spacing:.13em;color:var(--ft-teal);text-transform:uppercase;margin-bottom:.5rem}
+.fa-val{display:flex;flex-wrap:wrap;gap:.35rem}
+.fa-vide{color:var(--ft-doux);font-size:.8rem}
+.fa-moteur{margin-top:12px;background:#160F2D;border:1px solid var(--ft-ligne);border-radius:14px;padding:.85rem 1rem}
+.fa-moteur .fa-lab{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.fa-moteur .fa-lab span{font:600 .74rem 'Plus Jakarta Sans',sans-serif;letter-spacing:0;text-transform:none;color:var(--ft-doux)}
+.fp-separateur{height:1px;background:var(--ft-ligne);margin:.3rem 0}
+/* ---------- badges */
+.fb-tete{display:flex;align-items:center;gap:.9rem;margin:-.1rem 0 .9rem;font-size:.84rem;color:var(--ft-doux)}
+.fb-tete b{color:#fff;font-size:.95rem}
+.fb-tete .ft-jauge{flex:0 1 320px}
+.fb-grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.fb-carte{display:flex;align-items:flex-start;gap:.9rem;background:var(--ft-carte);border:1px solid var(--ft-ligne);border-radius:16px;
+ padding:.9rem 1rem;box-shadow:var(--ft-ombre);min-width:0}
+.fb-medaille{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.55rem;
+ background:radial-gradient(circle at 30% 25%,#3A2A66,#1A1236);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.fb-carte.ok{border-color:rgba(235,195,116,.35);background:linear-gradient(180deg,rgba(235,195,116,.07),transparent 60%),var(--ft-carte)}
+.fb-carte.ok .fb-medaille{background:radial-gradient(circle at 32% 26%,#FBE3A4,#D9A548 55%,#9A6420);
+ box-shadow:0 0 0 3px rgba(235,195,116,.28),0 8px 18px rgba(235,195,116,.22)}
+.fb-carte.off .fb-medaille{filter:grayscale(1);opacity:.5}
+.fb-texte{min-width:0;flex:1}
+.fb-titre{font-weight:800;font-size:.92rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-carte.off .fb-titre{color:#CFC6DE}
+.fb-cond{font-size:.75rem;color:var(--ft-doux);margin:.15rem 0 .5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-prog{display:flex;align-items:center;gap:.55rem;font-size:.72rem;font-weight:800;color:var(--ft-doux)}
+.fb-prog .ft-jauge{flex:1;height:6px}
+.fb-ok{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:800;color:#F3D598}

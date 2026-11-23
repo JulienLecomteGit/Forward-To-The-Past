@@ -1,0 +1,29 @@
+/* ---------- Mes films : lignes compactes cliquables */
+[class*="st-key-glignes_"]{flex-wrap:wrap!important;gap:12px!important;align-items:stretch!important}
+[class*="st-key-glignes_"]>[data-testid="stLayoutWrapper"]{flex:0 0 calc((100% - 12px) / 2)!important;width:calc((100% - 12px) / 2)!important;min-width:0}
+[class*="st-key-lf_"]{position:relative;gap:0!important;height:100%;background:var(--ft-carte);border:1px solid var(--ft-ligne);border-radius:14px;
+ box-shadow:0 6px 16px rgba(0,0,0,.28);transition:border-color .15s ease,transform .15s ease}
+[class*="st-key-lf_"]:hover{border-color:rgba(218,75,132,.5);transform:translateY(-2px)}
+[class*="st-key-lf_"]>.stElementContainer:first-child,[class*="st-key-lf_"]>.stElementContainer:first-child>div{height:100%}
+.fl-ligne{display:grid;grid-template-columns:58px minmax(0,1fr);gap:12px;align-items:start;padding:10px 52px 10px 10px;height:100%;min-height:108px}
+.fl-ligne img,.fl-vide{width:58px;height:87px;object-fit:cover;border-radius:8px;background:#241942;position:relative;display:block}
+.fl-ligne img::after,.fl-vide{content:"🎞️";position:absolute;inset:0;display:grid;place-items:center;border-radius:8px;
+ background:repeating-linear-gradient(135deg,#1a1230,#1a1230 8px,#241942 9px,#241942 10px)}
+.fl-vide{position:static}
+.fl-titre{font-weight:800;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ft-texte)}
+.fl-meta{font-size:.76rem;color:var(--ft-doux);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.fl-info{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-top:6px;font-size:.76rem;font-weight:700;color:#EFEAF7}
+.fl-info .ft-etoiles{font-size:.86rem}
+.fl-chip{border-radius:6px;padding:.1rem .45rem;background:rgba(122,214,206,.12);color:#A8E9E3;font-size:.7rem;font-weight:700}
+.fl-avis{font-size:.75rem;font-style:italic;color:#E2D9F0;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+[class*="st-key-lfo_"]{position:absolute!important;inset:0;z-index:2;width:100%!important;margin:0!important}
+[class*="st-key-lfo_"] .stButton,[class*="st-key-lfo_"] .stButton>div,[class*="st-key-lfo_"] button{width:100%!important;height:100%!important;
+ min-height:100%!important;opacity:0;cursor:pointer}
+[class*="st-key-lfx_"]{position:absolute!important;right:9px;bottom:9px;z-index:3;width:auto!important;margin:0!important}
+[class*="st-key-lfx_"] button{width:32px!important;height:32px!important;min-height:32px!important;padding:0!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;transform:none!important}
+[class*="st-key-lfx_"] button p{display:none}
+[class*="st-key-lfx_"] button [data-testid="stIconMaterial"]{color:#9C90B5;font-size:1.35rem;margin:0;transition:color .15s ease,transform .15s ease}
+[class*="st-key-lfx_"] button:hover,[class*="st-key-lfx_"] button:focus-visible{background:transparent!important;border:0!important;outline:0}
+[class*="st-key-lfx_"] button:hover [data-testid="stIconMaterial"]{color:#FF6B7A;transform:scale(1.15) rotate(-6deg)}
+[class*="st-key-mf_outils"]{background:var(--ft-carte);border:1px solid var(--ft-ligne);border-radius:14px;padding:.75rem .9rem .85rem;margin:.2rem 0 .6rem}

@@ -1,0 +1,15 @@
+/* ---------- fiche film (pleine page) */
+[class*="st-key-reac_fiche_"]{max-width:320px;margin:10px auto 0;border:1px solid var(--ft-ligne);border-radius:12px;background:var(--ft-carte)}
+.ff-poster{position:relative;width:100%;max-width:320px;aspect-ratio:2/3;border-radius:16px;overflow:hidden;margin:0 auto;
+ background:#191130;border:1px solid var(--ft-ligne);box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.ff-poster img{width:100%;height:100%;object-fit:cover}
+.ff-poster img::after{content:attr(data-t);position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px;color:var(--ft-ambre);
+ font-weight:700;background:repeating-linear-gradient(135deg,#1a1230,#1a1230 12px,#241942 13px,#241942 14px)}
+.ff-titre{font-size:clamp(1.6rem,2.6vw,2.2rem)!important;margin:0!important;padding:0!important}
+.ff-meta{display:flex;flex-wrap:wrap;gap:.35rem .9rem;font-weight:700;margin:.7rem 0 .9rem;color:#EFEAF7;font-size:.92rem}
+.ff-meta span{white-space:nowrap}
+.ff-ligne{margin:.3rem 0;color:#E9E2F4}.ff-ligne b{color:#fff}
+.ff-synopsis{color:#E6DDF2;line-height:1.6;font-size:.98rem}
+.ft-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.ft-chip{border-radius:8px;padding:.25rem .6rem;font-size:.78rem;font-weight:600;background:rgba(235,195,116,.12);color:#F3D598}
+.ft-chip.teal{background:rgba(122,214,206,.12);color:#A8E9E3}.ft-chip.rose{background:rgba(218,75,132,.16);color:#F3A9C7}

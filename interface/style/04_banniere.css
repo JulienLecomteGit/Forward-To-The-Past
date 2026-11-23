@@ -1,0 +1,14 @@
+/* ---------- bannière d'accueil (V8) */
+.ft-banniere{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--ft-ligne);min-height:210px;
+ aspect-ratio:1920/427;max-height:300px;width:100%;box-shadow:var(--ft-ombre);margin-bottom:.4rem}
+.ft-ban-img{position:absolute;inset:0;background:url(app/static/banner_panoramique.jpg) right center/cover no-repeat}
+.ft-ban-voile{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,8,27,.88) 0%,rgba(11,8,27,.55) 45%,rgba(11,8,27,0) 72%)}
+.ft-ban-texte{position:relative;height:100%;display:flex;flex-direction:column;justify-content:space-between;gap:.7rem;padding:1.05rem 2rem 1.2rem;max-width:64%}
+.ft-pastille{align-self:flex-start;font:800 .68rem 'Orbitron',sans-serif;letter-spacing:.12em;color:var(--ft-teal);
+ border:1px solid rgba(122,214,206,.45);background:rgba(11,8,27,.55);border-radius:999px;padding:.35rem .8rem;margin:0}
+.ft-ban-texte h1{font-family:'Kanit','Segoe UI Black','Arial Black',sans-serif!important;font-style:italic;font-weight:900!important;font-size:clamp(1.7rem,3vw,2.75rem)!important;line-height:1.04;letter-spacing:.005em;margin:0!important;padding:0 .2em 0 0!important;
+ background:linear-gradient(180deg,#FFF4AE 0%,#FFD45C 30%,#FF9C3D 62%,#FF4F7D 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important;
+ filter:drop-shadow(0 2px 0 #3A0B3E) drop-shadow(0 0 14px rgba(255,79,125,.35))}
+.ft-ban-texte h1 em{font-style:italic;color:transparent}
+.ft-ban-texte h1 span{display:block;white-space:nowrap;font-size:1em}
+.ft-ban-texte p{margin:0;color:#EDE5F7;font-size:.92rem;line-height:1.45}

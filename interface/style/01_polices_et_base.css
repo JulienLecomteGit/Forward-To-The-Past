@@ -1,0 +1,28 @@
+/* polices libres (OFL) servies par l'app : fonctionnent sans internet */
+@font-face{font-family:'DSEG7';font-weight:700;font-display:swap;src:url(app/static/polices/DSEG7Classic-Bold.woff2) format('woff2')}
+@font-face{font-family:'DSEG14';font-weight:700;font-display:swap;src:url(app/static/polices/DSEG14Classic-Bold.woff2) format('woff2')}
+@font-face{font-family:'Kanit';font-style:italic;font-weight:700;font-display:swap;src:url(app/static/polices/kanit-latin-700-italic.woff2) format('woff2')}
+@font-face{font-family:'Kanit';font-style:italic;font-weight:800;font-display:swap;src:url(app/static/polices/kanit-latin-800-italic.woff2) format('woff2')}
+@font-face{font-family:'Kanit';font-style:italic;font-weight:900;font-display:swap;src:url(app/static/polices/kanit-latin-900-italic.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:swap;src:url(app/static/polices/plus-jakarta-sans-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:swap;src:url(app/static/polices/plus-jakarta-sans-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:swap;src:url(app/static/polices/plus-jakarta-sans-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:swap;src:url(app/static/polices/plus-jakarta-sans-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:swap;src:url(app/static/polices/plus-jakarta-sans-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Orbitron';font-style:normal;font-weight:600;font-display:swap;src:url(app/static/polices/orbitron-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Orbitron';font-style:normal;font-weight:800;font-display:swap;src:url(app/static/polices/orbitron-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url(app/static/polices/share-tech-mono-latin-400-normal.woff2) format('woff2')}
+:root{--ft-fond:#0B081B;--ft-fond2:#110B26;--ft-carte:#191130;--ft-carte2:#211743;--ft-rose:#DA4B84;--ft-rose2:#C23D76;
+--ft-teal:#7AD6CE;--ft-ambre:#EBC374;--ft-texte:#FAF5EE;--ft-doux:#CEC3DF;--ft-ligne:rgba(255,255,255,.09);
+--ft-ligne2:rgba(255,255,255,.16);--ft-ombre:0 12px 28px rgba(0,0,0,.38);--ft-r:14px;--ft-gap:18px;--ft-col:4}
+.stElementContainer:has(.ft-css){display:none}
+html,body,.stApp,.stApp p,.stApp li,.stApp label,.stApp input,.stApp textarea,.stApp button{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif}
+.stApp{color:var(--ft-texte);background:radial-gradient(960px 440px at 88% -6%,rgba(218,75,132,.14),transparent 62%),
+ radial-gradient(780px 380px at 10% 4%,rgba(88,199,189,.09),transparent 58%),linear-gradient(180deg,#110B26 0%,#0B081B 100%) fixed}
+header[data-testid="stHeader"]{background:transparent}
+.stAppDeployButton,[data-testid="stDecoration"]{display:none!important}
+.block-container{padding-top:2.2rem;padding-bottom:4rem;max-width:1360px}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif!important;font-weight:800!important;letter-spacing:-.01em;color:var(--ft-texte)}
+[data-testid="stCaptionContainer"],.ft-petit{color:var(--ft-doux)!important}
+.ft-petit{font-size:.82rem}
+a{color:var(--ft-teal)}

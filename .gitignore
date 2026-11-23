@@ -1,0 +1,12 @@
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+# Secrets (code admin réel)
+.streamlit/secrets.toml
+# Base des membres : données personnelles, jamais dans Git (recréée automatiquement au lancement)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+# Index de recherche (recréé automatiquement depuis le catalogue)
+static/recherche_*.json
