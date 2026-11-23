@@ -1,4 +1,4 @@
-# 🌴 Forward To The Past · ciné-club (v3 — design V8 + moteur complet)
+# 🌴 Forward To The Past · ciné-club
 
 Application Streamlit du Projet 2 (appel à projets CNC) : ciné-club rétro 80s avec **inscription façon Spotify/Netflix**, **moteur de recommandation personnalisé**, **carnet de séance**, **version mobile** et **espace admin** pour piloter le moteur.
 
