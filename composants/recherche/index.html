@@ -80,9 +80,9 @@ kbd{font-family:inherit;border:1px solid rgba(255,255,255,.18);border-radius:4px
     if (i < 0 || n.length !== titre.length) { return echap(titre); }  // accents composés : pas de surlignage approximatif
     return echap(titre.slice(0, i)) + "<mark>" + echap(titre.slice(i, i + nq.length)) + "</mark>" + echap(titre.slice(i + nq.length));
   }
-  var INTROUVABLE = "app/static/" + encodeURIComponent("Affiche rétro synthwave introuvable.png");  // film sans jaquette
+  var INTROUVABLE = "/app/static/" + encodeURIComponent("Affiche rétro synthwave introuvable.png");  // film sans jaquette
   function image(code) {
-    if (!code) { return S.base + INTROUVABLE; }
+    if (!code) { return INTROUVABLE; }
     if (code.charAt(0) === "L") { return S.base + "app/static/affiches/" + code.slice(2); }
     return "https://image.tmdb.org/t/p/w92" + code;
   }
@@ -153,7 +153,7 @@ kbd{font-family:inherit;border:1px solid rgba(255,255,255,.18);border-radius:4px
         var i = S.items.length, src = image(f.img);
         S.items.push({type: "film", tconst: f.t, titre: f.titre});
         html += '<div class="item" data-i="' + i + '" role="option"><div class="vignette">' +
-          (src ? '<img src="' + src + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'' + S.base + INTROUVABLE + '\'">' : "") + '</div><div class="texte">' +
+          (src ? '<img src="' + src + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'' + INTROUVABLE + '\'">' : "") + '</div><div class="texte">' +
           '<div class="titre">' + surligner(f.titre, nq) + '</div><div class="sous"><span class="annee">' + (f.an || "—") + '</span>' +
           echap(f.genre || "") + (f.orig && norm(f.orig) !== f.n1 ? " · " + echap(f.orig) : (f.real ? " · " + echap(f.real) : "")) +
           '</div></div></div>';

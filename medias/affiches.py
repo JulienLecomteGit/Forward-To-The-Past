@@ -12,8 +12,9 @@ from urllib.parse import quote
 
 from config.chemins import AFFICHE_INTROUVABLE, DOSSIER_AFFICHES, URL_STATIQUE, URL_TMDB_IMAGES
 
-# Adresse web de l'affiche de remplacement (espaces et accent encodés : « Affiche%20r%C3%A9tro… »)
-URL_INTROUVABLE = URL_STATIQUE + quote(AFFICHE_INTROUVABLE)
+# Adresse web de l'affiche de remplacement (espaces et accent encodés : « Affiche%20r%C3%A9tro… »).
+# Chemin absolu « /app/static/… » : sur Streamlit Cloud, le proxy « /~/+/ » ne sert pas un nom avec espaces ou accent (404).
+URL_INTROUVABLE = "/" + URL_STATIQUE + quote(AFFICHE_INTROUVABLE)
 CHEMIN_TMDB_VALIDE = re.compile(r"/[A-Za-z0-9_-]+\.(?:jpg|jpeg|png)")  # forme d'un poster_path TMDB
 
 

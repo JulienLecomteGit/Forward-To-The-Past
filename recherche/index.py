@@ -15,7 +15,7 @@ import streamlit as st
 from config.chemins import DOSSIER_STATIC
 from medias.affiches import CHEMIN_TMDB_VALIDE, affiches_locales
 
-VERSION = "2"  # à changer pour forcer la régénération de l'index
+VERSION = "3"  # à changer pour forcer la régénération de l'index
 
 
 @st.cache_resource(show_spinner=False, max_entries=2)
