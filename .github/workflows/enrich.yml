@@ -1,0 +1,29 @@
+name: enrichissement-catalogue
+on:
+  push:
+    branches: [enrichissement-claude]
+    paths: ['enrich/run.txt']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: enrichissement-claude}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests beautifulsoup4 lxml
+      - name: Lancer l'étape
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          STEP=$(head -1 enrich/run.txt)
+          python enrich/$STEP.py 2>&1 | tail -50 > enrich/out_log_$STEP.txt || true
+      - name: Publier les résultats
+        run: |
+          git config user.name "fttp-bot"; git config user.email "fttp-bot@users.noreply.github.com"
+          git add enrich
+          git commit -m "Résultats étape $(head -1 enrich/run.txt)" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
