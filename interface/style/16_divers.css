@@ -7,7 +7,7 @@
 .ft-coche::after{content:"\2713";display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ft-rose);color:#fff;font-weight:800;font-size:1.4rem}
 .ft-etoiles{color:#F0C97A;letter-spacing:.1em;font-size:1rem;white-space:nowrap}
 /* ---------- V10 : affiche introuvable (TMDB en erreur 404 : l'image cassée affiche son ::after) */
-:is(.fc-poster,.ff-poster,.fj-img,.cv-affiche,.fl-ligne) img::after{content:"";background:#191130 url("/app/static/Affiche%20r%C3%A9tro%20synthwave%20introuvable.png") center/cover no-repeat}
+:is(.fc-poster,.ff-poster,.fj-img,.cv-affiche,.fl-ligne) img::after{content:"";background:#191130 url("app/static/affiche_introuvable.png") center/cover no-repeat}
 /* ---------- V10 : en-tête Streamlit Cloud transparent aux clics (seuls ses boutons restent actifs) */
 header[data-testid="stHeader"],header[data-testid="stHeader"] *{pointer-events:none}
 header[data-testid="stHeader"] :is(button,a){pointer-events:auto}
