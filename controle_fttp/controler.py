@@ -20,7 +20,6 @@ Résultat : rapport.md dans le dossier de sortie + verdict CONFORME / NON CONFOR
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import shutil
 import subprocess
