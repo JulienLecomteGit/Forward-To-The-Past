@@ -1,0 +1,4 @@
+https://query.wikidata.org/sparql?query=SELECT%201 400
+https://api.themoviedb.org/3/configuration 401
+https://www.allocine.fr/film/fichefilm_gen_cfilm=27063.html 200
+https://www.data.gouv.fr/api/1/datasets/?q=visa 200
