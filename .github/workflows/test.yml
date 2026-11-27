@@ -1,0 +1,18 @@
+name: test-reseau
+on:
+  push:
+    branches: [enrichissement-claude]
+    paths: ['.github/workflows/test.yml']
+permissions:
+  contents: write
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: enrichissement-claude}
+      - run: |
+          mkdir -p enrich
+          for u in https://query.wikidata.org/sparql?query=SELECT%201 https://api.themoviedb.org/3/configuration https://www.allocine.fr/film/fichefilm_gen_cfilm=27063.html https://www.data.gouv.fr/api/1/datasets/?q=visa; do echo "$u $(curl -s -o /dev/null -w '%{http_code}' -A 'FTTP-bot/1.0' $u)"; done > enrich/test.txt
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add enrich; git commit -m "test reseau"; git push
