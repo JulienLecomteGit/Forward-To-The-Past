@@ -50,3 +50,28 @@
 | 20 | **Base des membres exclue de Git** (`data/*.db` dans `.gitignore`) | ⚪ Info (protection) | même si les 180 membres sont fictifs, la base n'est pas publiée ; elle est recréée automatiquement au lancement | à garder ainsi |
 
 | 21 | **Premier démarrage : deux visiteurs simultanés font planter le second** (`sqlite3.IntegrityError: UNIQUE constraint failed: utilisateurs.email`). Constaté sur Streamlit Cloud le 23/11, reproduit en local (copie fraîche du dépôt, 2 visiteurs à 3 s d'écart). Déjà présent dans la V9 (`app.py` · `main` : `if nb_membres() == 0` puis création des 180 membres, sans verrou) | 🟠 si mise en ligne | pendant la création de la base (environ 1 min sur Streamlit Cloud), un 2ᵉ chargement de la page recrée les mêmes membres → erreur rouge pour ce visiteur ; la base reste correcte (180 membres) et les visiteurs suivants n'ont aucun problème | verrou partagé (`st.cache_resource` + `threading.Lock`) autour de la création, avec revérification `nb_membres() == 0` dans le verrou : le 2ᵉ visiteur attend puis voit l'accueil — **à décider** |
+
+## E. Version 10 (27/11/2026)
+
+### Changements
+| Version | Changement | Fichiers |
+|---|---|---|
+| V10 | Base `data/Catalogue_CNC_VF.csv` : 7 356 films, + `overview_fr` et `source_fr`, 10 acteurs par film (au lieu de 5) | `data/`, `config/catalogue.py` |
+| V10 | Synopsis affiché en français (`overview_fr`), repli automatique sur `overview` ; mention selon la source. Le moteur garde `overview` (anglais) pour le TF-IDF | `donnees/catalogue.py`, `vues/fiche.py` |
+| V10 | Affiche de remplacement pour les films sans jaquette (19) et les affiches TMDB en erreur | `medias/affiches.py`, `16_divers.css`, recherche |
+| V10 | En-tête Streamlit transparent aux clics : la barre de Streamlit Cloud masquait le haut du bouton Mobile, du « ? » et d'Admin | `16_divers.css` |
+| V10.1 | Adresse absolue `/app/static/…` pour l'affiche : **inefficace** sur Cloud (renvoie la page HTML) | remplacée par la V10.2 |
+| V10.2 | Affiche renommée `affiche_introuvable.png` (nom ASCII) | `static/`, `config/chemins.py` |
+| V10.3 | Documentation à jour (README, LISEZ_D_ABORD, LISEZMOI_CODE, cette section) | documentation |
+
+### Effet sur les recommandations (kit de contrôle, même base de membres)
+Code V10 + ancienne base : aucun écart de calcul. Nouvelle base : « Pour toi » 88 % de films en commun avec la V9.1, « Films proches » 92 % ; précision@10 0,128 → 0,140, rappel@10 0,31 → 0,34. Cause : 10 acteurs par film.
+
+### Limites connues
+| # | Constat | Gravité | Effet | Correction possible |
+|---|---|---|---|---|
+| 22 | **Streamlit Cloud ne sert pas un fichier de `static/` dont le nom contient des espaces ou des accents** (404) | 🟠 | image invisible en ligne | nommer les fichiers de `static/` en ASCII (fait pour l'affiche) |
+| 23 | **Après une fusion sur `main`, Streamlit Cloud peut garder d'anciens modules Python en mémoire** (constaté le 27/11 : CSS à jour, adresse d'affiche encore en V10.1) | 🟠 | mélange de deux versions en ligne | *Manage app* › ⋮ › **Reboot app** après chaque mise en ligne |
+| 24 | **Safari (iPhone) n'affiche pas le `::after` d'une image cassée** | 🟡 | si une affiche TMDB renvoie une erreur, case sombre au lieu de l'affiche introuvable (comme en V9.1) | aucune sans JavaScript (`st.html` retire `onerror`) |
+| 25 | **Le guide de personnalisation date de la V9.1** (voir point 13) : les 3 règles ajoutées en fin de `16_divers.css` n'y figurent pas | 🟡 | numéros de ligne de `16_divers.css` décalés de 5 lignes en fin de fichier | regénérer le guide |
+| 26 | **Données IMDb publiées dans le dépôt public** (décision du 27/11 pour que le site en ligne fonctionne ; voir point 18) | 🟠 | usage non commercial à respecter | dépôt privé ou CSV hors dépôt |

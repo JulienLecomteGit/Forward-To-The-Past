@@ -36,14 +36,14 @@ python -m streamlit run app.py          # → http://localhost:8501
 | Mot de passe admin réel | `.streamlit/secrets.toml` → `ADMIN_MDP = "…"` (sinon variable `FTTP_ADMIN_MDP`, sinon « 007 » de démo) |
 
 ### Le contrôle de non-régression (kit `controle_fttp`, à côté du projet)
-Il compare votre version à la V9 de référence : mêmes calculs, même affichage au pixel près.
+Il compare votre version à la version de référence (aujourd'hui la V10.3, copiée dans `Forward_To_The_Past_v10`) : mêmes calculs, même affichage au pixel près.
 ```powershell
 cd "C:\chemin\vers\FTTP\controle_fttp"
-python controler.py --reference ..\Forward_To_The_Past_v9 --candidat ..\Forward_To_The_Past --golden-seul   # calculs, ≈ 15 s
-python controler.py --reference ..\Forward_To_The_Past_v9 --candidat ..\Forward_To_The_Past                 # complet, ≈ 20 min
-python controle_demo.py --reference ..\Forward_To_The_Past_v9 --candidat ..\Forward_To_The_Past             # base de démo
-python controle_admin.py  ..\Forward_To_The_Past_v9 ..\Forward_To_The_Past ..\Forward_To_The_Past_v9\data\fttp.db  # boutons de l'admin
-python controle_ecrans.py ..\Forward_To_The_Past_v9 ..\Forward_To_The_Past ..\Forward_To_The_Past_v9\data\fttp.db  # inscription, carnet
+python controler.py --reference ..\Forward_To_The_Past_v10 --candidat ..\Forward_To_The_Past --golden-seul   # calculs, ≈ 15 s
+python controler.py --reference ..\Forward_To_The_Past_v10 --candidat ..\Forward_To_The_Past                 # complet, ≈ 20 min
+python controle_demo.py --reference ..\Forward_To_The_Past_v10 --candidat ..\Forward_To_The_Past             # base de démo
+python controle_admin.py  ..\Forward_To_The_Past_v10 ..\Forward_To_The_Past ..\Forward_To_The_Past_v10\data\fttp.db  # boutons de l'admin
+python controle_ecrans.py ..\Forward_To_The_Past_v10 ..\Forward_To_The_Past ..\Forward_To_The_Past_v10\data\fttp.db  # inscription, carnet
 ```
 Résultat : `resultats_controle\rapport.md`. ✅ CONFORME = rien n'a changé. 🟡 BRUIT = quelques pixels qui varient aussi d'une capture à l'autre de la V9 elle-même (sans conséquence). ❌ = un écart reproduit : à examiner. Détails : `LISEZMOI.md` du kit.
 
