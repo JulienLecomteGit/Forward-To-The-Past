@@ -49,7 +49,7 @@ def afficher(ctx):
     gauche, droite = colonnes(ctx.mobile, [1, 2.3], gap="large")
     with gauche:
         url = url_affiche(f["affiche"], "w500")
-        img = balise_affiche(url, f["titre"], paresseuse=False) if url else ""
+        img = balise_affiche(url, f["titre"], paresseuse=False)
         st.html(f'<div class="ff-poster">{img}</div>')
         reactions(f, inter, f"reac_fiche_{tconst}", "f", tconst, source)
     with droite:

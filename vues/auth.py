@@ -283,7 +283,7 @@ def _etape_coeurs(ctx, ins):
             f = cat.film(j)
             choisi = f["tconst"] in ins["coeurs"]
             url = url_affiche(f["affiche"])
-            img = balise_affiche(url, f["titre"]) if url else ""
+            img = balise_affiche(url, f["titre"])
             with st.container(key=f"carte_ob_{f['tconst']}"):
                 st.html(f'<div class="fc-poster">{img}{"<div class=ft-coche></div>" if choisi else ""}</div>'
                         f'<div class="fc-corps"><div class="fc-titre">{escape(f["titre"])}</div>'

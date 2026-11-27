@@ -15,6 +15,8 @@ BDD_PAR_DEFAUT = DOSSIER_DATA / "fttp.db"         # remplaçable par la variable
 
 URL_STATIQUE = "app/static/"                      # adresse web de static/ vue depuis le navigateur
 URL_TMDB_IMAGES = "https://image.tmdb.org/t/p/"   # serveur d'images TMDB (affiches absentes en local)
-# Affiche de remplacement (film sans jaquette), dans static/. Nom ASCII obligatoire : Streamlit Cloud renvoie 404
+# Affiche de remplacement (film sans jaquette), dans static/. Seul endroit où son nom est écrit : le CSS le reçoit
+# par la variable --affiche-introuvable (interface/theme.py), la recherche par un paramètre (recherche/__init__.py).
+# Nom ASCII obligatoire : Streamlit Cloud renvoie 404
 # pour un nom avec espaces ou accent (original sur le Drive : « Affiche rétro synthwave introuvable.png »)
 AFFICHE_INTROUVABLE = "affiche_introuvable.png"

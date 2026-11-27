@@ -25,7 +25,8 @@ def affiches_locales() -> frozenset:
 
 def url_affiche(chemin: str, taille: str = "w342") -> str:
     """Affiche locale vérifiée (static/affiches, fonctionne hors-ligne) sinon serveur d'images TMDB ;
-    affiche de remplacement si le chemin est vide ou invalide (une erreur 404 de TMDB est gérée par le CSS)."""
+    affiche de remplacement si le chemin est vide ou invalide (une erreur 404 de TMDB est gérée par le CSS).
+    Renvoie toujours une adresse."""
     chemin = (chemin or "").strip()
     if not CHEMIN_TMDB_VALIDE.fullmatch(chemin):
         return URL_INTROUVABLE

@@ -42,8 +42,7 @@ def carte(cat, j: int, cle: str, origine: str, inter: dict | None, score=None, r
     t = f["tconst"]
     inter = inter or {}
     url = url_affiche(f["affiche"])
-    img = (balise_affiche(url, f["titre"]) if url
-           else f'<div class="fc-absent">{escape(f["titre"])}</div>')
+    img = balise_affiche(url, f["titre"])
     badges = ""
     if f["fr"]:
         badges += '<span class="fc-fr">🇫🇷 FR</span>'
@@ -87,7 +86,7 @@ def ligne_film(cat, j: int, cle: str, origine: str, sous_html: str, rappel, args
     """Carte-ligne : un clic ouvre la fiche, la corbeille (en bas à droite) retire le film de la liste."""
     f = cat.film(j)
     url = url_affiche(f["affiche"], "w185")
-    img = f'<img src="{url}" alt="" loading="lazy">' if url else '<div class="fl-vide"></div>'
+    img = f'<img src="{url}" alt="" loading="lazy">'
     with st.container(key=f"lf_{cle}"):
         st.html(f'<div class="fl-ligne">{img}<div><div class="fl-titre">{escape(f["titre"])}</div>'
                 f'<div class="fl-meta">{escape(meta_film(f))}</div>{sous_html}</div></div>')

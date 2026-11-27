@@ -2,7 +2,7 @@
 
 [![Ouvrir dans Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://forward-to-the-past.streamlit.app/) · **App en ligne : https://forward-to-the-past.streamlit.app/**
 
-**Version 10.3** (27/11/2026) · nouveautés : base `data/Catalogue_CNC_VF.csv` (synopsis en français, 10 acteurs par film), affiche « introuvable » pour les films sans jaquette ou en erreur TMDB, bouton Mobile et « ? » cliquables sur Streamlit Cloud. Détails et limites : `BUGS_ET_RISQUES.md`, section E.
+**Version 10.4** (27/11/2026) · nouveautés : base `data/Catalogue_CNC_VF.csv` (synopsis en français, 10 acteurs par film), affiche « introuvable » pour les films sans jaquette ou en erreur TMDB, bouton Mobile et « ? » cliquables sur Streamlit Cloud. Détails et limites : `BUGS_ET_RISQUES.md`, section E.
 
 Version 9.1 (23/11/2026) · nouveautés : 6 corrections (voir `BUGS_ET_RISQUES.md`, section B) et guide de personnalisation interactif (`GUIDE_PERSONNALISATION.html`). Pour démarrer : `LISEZ_D_ABORD.md`.
 

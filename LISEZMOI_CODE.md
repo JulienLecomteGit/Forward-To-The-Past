@@ -36,7 +36,7 @@ python -m streamlit run app.py          # → http://localhost:8501
 | Mot de passe admin réel | `.streamlit/secrets.toml` → `ADMIN_MDP = "…"` (sinon variable `FTTP_ADMIN_MDP`, sinon « 007 » de démo) |
 
 ### Le contrôle de non-régression (kit `controle_fttp`, à côté du projet)
-Il compare votre version à la version de référence (aujourd'hui la V10.3, copiée dans `Forward_To_The_Past_v10`) : mêmes calculs, même affichage au pixel près.
+Il compare votre version à la version de référence (aujourd'hui la V10.4, copiée dans `Forward_To_The_Past_v10`) : mêmes calculs, même affichage au pixel près.
 ```powershell
 cd "C:\chemin\vers\FTTP\controle_fttp"
 python controler.py --reference ..\Forward_To_The_Past_v10 --candidat ..\Forward_To_The_Past --golden-seul   # calculs, ≈ 15 s

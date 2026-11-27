@@ -63,6 +63,7 @@
 | V10.1 | Adresse absolue `/app/static/…` pour l'affiche : **inefficace** sur Cloud (renvoie la page HTML) | remplacée par la V10.2 |
 | V10.2 | Affiche renommée `affiche_introuvable.png` (nom ASCII) | `static/`, `config/chemins.py` |
 | V10.3 | Documentation à jour (README, LISEZ_D_ABORD, LISEZMOI_CODE, cette section) | documentation |
+| V10.4 | Nettoyage : branches de secours inutiles supprimées (`fc-absent`, `fj-vide`, `fl-vide`, `cv-sans` et leur CSS) ; nom de l'affiche écrit une seule fois (`config/chemins.py`), transmis au CSS par la variable `--affiche-introuvable` et à la recherche par un paramètre | `interface/`, `vues/`, `recherche/`, CSS |
 
 ### Effet sur les recommandations (kit de contrôle, même base de membres)
 Code V10 + ancienne base : aucun écart de calcul. Nouvelle base : « Pour toi » 88 % de films en commun avec la V9.1, « Films proches » 92 % ; précision@10 0,128 → 0,140, rappel@10 0,31 → 0,34. Cause : 10 acteurs par film.
