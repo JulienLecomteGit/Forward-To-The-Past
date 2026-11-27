@@ -7,7 +7,7 @@ Utilisé par : demo (generation), donnees (catalogue), etat (cache), interface (
 from pathlib import Path
 
 # Nom du fichier catalogue, cherché dans data/ puis dans le Drive (voir chemin_csv)
-CSV_NOM = "dataset_catalogue_Final_enrichi.csv"
+CSV_NOM = "Catalogue_CNC_VF.csv"
 DOSSIER_PROJET = Path("Formation Data Analyst", "Projets", "Convaincre le CNC de financer votre projet")
 DANS_PROJET = Path("Données", "Finalisées", "catalogue_Final_enrichi", CSV_NOM)
 REQUIS = ("tconst", "titre_affiche", "originalTitle", "startYear", "runtimeMinutes", "genre_source",

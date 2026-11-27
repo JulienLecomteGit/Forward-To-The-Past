@@ -13,9 +13,9 @@ from collections import Counter
 import streamlit as st
 
 from config.chemins import DOSSIER_STATIC
-from medias.affiches import affiches_locales
+from medias.affiches import CHEMIN_TMDB_VALIDE, affiches_locales
 
-VERSION = "1"  # à changer pour forcer la régénération de l'index
+VERSION = "2"  # à changer pour forcer la régénération de l'index
 
 
 @st.cache_resource(show_spinner=False, max_entries=2)
@@ -31,6 +31,8 @@ def _index(_cat, empreinte: str) -> str:
         for j in _cat.par_popularite:
             f = df.iloc[int(j)]
             aff = f["affiche"]
+            if not CHEMIN_TMDB_VALIDE.fullmatch(aff.strip()):
+                aff = ""                   # sans jaquette : le composant affiche l'affiche de remplacement
             code = ("L/" + aff.lstrip("/")) if aff and aff.lstrip("/") in locales else aff
             annee = int(f["annee"]) if f["annee"] == f["annee"] else None
             films.append([f["tconst"], f["titre"], f["original"] if f["original"] != f["titre"] else "", annee, f["genre"],

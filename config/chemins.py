@@ -15,3 +15,5 @@ BDD_PAR_DEFAUT = DOSSIER_DATA / "fttp.db"         # remplaçable par la variable
 
 URL_STATIQUE = "app/static/"                      # adresse web de static/ vue depuis le navigateur
 URL_TMDB_IMAGES = "https://image.tmdb.org/t/p/"   # serveur d'images TMDB (affiches absentes en local)
+# Affiche de remplacement (film sans jaquette) : nom de fichier dans static/, à encoder dans les URL (espaces, accent)
+AFFICHE_INTROUVABLE = "Affiche rétro synthwave introuvable.png"

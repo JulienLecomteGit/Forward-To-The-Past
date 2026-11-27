@@ -167,7 +167,7 @@ Forward_To_The_Past/
 ├── composants/recherche/   # composant HTML/JS de la recherche prédictive
 ├── vues/                   # un fichier par écran : auth, accueil, explorer, machine, fiche, mes_films, profil
 │   └── admin/              # espace admin : un fichier par onglet (+ connexion, chargement, comparaison, simulation)
-├── data/                   # dataset_catalogue_Final_enrichi.csv + fttp.db
+├── data/                   # Catalogue_CNC_VF.csv + fttp.db
 ├── static/                 # logo, bannière, avatars/ (+ mini/, avatars.json), 39 affiches locales
 ├── .streamlit/             # config.toml (thème, fichiers statiques) + secrets.toml.exemple
 ├── .vscode/settings.json   # interpréteur .venv
@@ -189,12 +189,12 @@ Forward_To_The_Past/
 |---|---|
 | Affiches grises avec titre | Pas d'accès à `image.tmdb.org` : les 39 affiches locales restent affichées, les autres montrent un visuel de remplacement |
 | Polices absentes | Vérifier que le dossier `static/polices/` est présent (polices servies localement) |
-| Catalogue introuvable | Placer `dataset_catalogue_Final_enrichi.csv` dans `data/` |
+| Catalogue introuvable | Placer `Catalogue_CNC_VF.csv` dans `data/` |
 | Erreur après mise à jour | Supprimer `data/fttp.db` puis relancer (la base est recréée) |
 
 ## 📚 Sources des données et usage
 
-- **Catalogue** (`data/dataset_catalogue_Final_enrichi.csv`) construit à partir de :
+- **Catalogue** (`data/Catalogue_CNC_VF.csv`) construit à partir de :
   - **IMDb Non-Commercial Datasets** (titres, notes, votes, casting, réalisation) — https://developer.imdb.com/non-commercial-datasets/ — information courtesy of IMDb (https://www.imdb.com), usage personnel et non commercial ;
   - **TMDB** (affiches, synopsis, langues, pays) — *This product uses the TMDB API but is not endorsed or certified by TMDB* — https://www.themoviedb.org ;
   - entrées en salles en France issues des données publiques du CNC.

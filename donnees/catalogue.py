@@ -166,6 +166,12 @@ def lire_catalogue(contenu: bytes) -> Catalogue:
         raise ValueError("Le catalogue doit contenir au moins deux films.")
     genre = df["genre_source"].fillna("").str.strip().replace({"Aventure - action": "Aventure - Action"})
     ids_valides = lambda s: tuple(dict.fromkeys(p for p in _liste(s) if re.fullmatch(r"nm[0-9]{7,}", p)))  # noqa: E731
+    # Synopsis affiché : français (overview_fr, colonne facultative) sinon version originale (overview).
+    # Le moteur garde « resume » (overview, anglais) : TF-IDF et critère « histoire » inchangés.
+    resume = df["overview"].fillna("").astype(str)
+    vide = pd.Series([""] * len(df), index=df.index)
+    resume_fr = df.get("overview_fr", vide).fillna("").astype(str).str.strip()
+    source_fr = df.get("source_fr", vide).fillna("").astype(str).str.strip().where(resume_fr != "", "")
     sortie = pd.DataFrame({
         "tconst": df["tconst"],
         "tmdb_id": pd.to_numeric(df.get("tmdb_id", pd.Series([0] * len(df))), errors="coerce").fillna(0).astype(int),
@@ -182,7 +188,9 @@ def lire_catalogue(contenu: bytes) -> Catalogue:
         "saga": df["saga"].fillna("").astype(str),
         "note": pd.to_numeric(df["averageRating"], errors="coerce"),
         "votes": pd.to_numeric(df["numVotes"], errors="coerce").fillna(0),
-        "resume": df["overview"].fillna("").astype(str),
+        "resume": resume,
+        "resume_fr": resume_fr.where(resume_fr != "", resume),
+        "source_fr": source_fr,
         "affiche": df["poster_path"].fillna("").astype(str),
         "acteurs_ids": df["acteurs_nconst"].map(ids_valides),
         "acteurs_noms": df["acteurs_principaux"].map(_liste),

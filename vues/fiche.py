@@ -26,6 +26,9 @@ from medias.affiches import url_affiche
 from moteur.recommandation import pour_toi, similaires
 from outils.texte import annee_ou_vide, date_fr, nombre_fr
 
+# Mention sous le synopsis selon sa source (colonne source_fr du catalogue) ; à défaut : version originale
+SOURCES_SYNOPSIS = {"TMDB": "Synopsis en français (TMDB)", "TRADUCTION": "Synopsis traduit du résumé TMDB"}
+
 
 def afficher(ctx):
     """Fiche d'un film : retour, affiche + réactions, infos + carnet, « Pourquoi ce film ? », films similaires."""
@@ -78,8 +81,9 @@ def _infos(f, tconst):
             + (f'<p class="ff-ligne">🌟 <b>Casting principal :</b> {escape(", ".join(f["acteurs_noms"][:5]))}</p>'
                if f["acteurs_noms"] else ""))
     st.markdown("### 📖 Synopsis")
-    st.html(f'<p class="ff-synopsis">{escape(f["resume"] or "Résumé indisponible.")}</p>'
-            '<p class="ft-petit" style="margin-top:-.4rem">Résumé en version originale (TMDB)</p>')
+    source = SOURCES_SYNOPSIS.get(f.get("source_fr", ""), "Résumé en version originale (TMDB)")
+    st.html(f'<p class="ff-synopsis">{escape(f.get("resume_fr") or f["resume"] or "Résumé indisponible.")}</p>'
+            f'<p class="ft-petit" style="margin-top:-.4rem">{source}</p>')
     with st.container(horizontal=True):
         st.link_button("Bande-annonce", icon=":material/play_circle:", url="https://www.youtube.com/results?search_query="
                        + quote_plus(" ".join(x for x in (f["titre"], annee_ou_vide(f["annee"]), "bande annonce") if x)))
