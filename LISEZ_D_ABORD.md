@@ -1,4 +1,4 @@
-# Forward To The Past · V9.1 — archive complète
+# Forward To The Past · V10.3 — archive complète
 
 Tout est dans ce dossier : code, données (`data/`), images et polices (`static/`), base de démo, guide, documentation, kit de contrôle et preuves.
 
@@ -16,6 +16,7 @@ python -m streamlit run app.py
 |---|---|
 | Changer l'apparence (couleur, police, taille…) | `GUIDE_PERSONNALISATION.html` (ouvrir dans Chrome) |
 | Comprendre et modifier le code | `LISEZMOI_CODE.md`, `architecture.html` |
+| Nouveautés de la V10 | `README.md` (en tête) et `BUGS_ET_RISQUES.md`, section E |
 | Bugs et risques connus | `BUGS_ET_RISQUES.md` |
 | Présentation de l'app | `README.md` |
 | Contrôle de non-régression | `controle_fttp/LISEZMOI.md` |

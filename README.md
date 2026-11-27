@@ -2,7 +2,7 @@
 
 [![Ouvrir dans Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://forward-to-the-past.streamlit.app/) · **App en ligne : https://forward-to-the-past.streamlit.app/**
 
-**Version 10.2** (27/11/2026) · nouveautés : base `data/Catalogue_CNC_VF.csv` (synopsis en français, 10 acteurs par film), affiche « introuvable » pour les films sans jaquette ou en erreur TMDB, bouton Mobile et « ? » cliquables sur Streamlit Cloud.
+**Version 10.3** (27/11/2026) · nouveautés : base `data/Catalogue_CNC_VF.csv` (synopsis en français, 10 acteurs par film), affiche « introuvable » pour les films sans jaquette ou en erreur TMDB, bouton Mobile et « ? » cliquables sur Streamlit Cloud. Détails et limites : `BUGS_ET_RISQUES.md`, section E.
 
 Version 9.1 (23/11/2026) · nouveautés : 6 corrections (voir `BUGS_ET_RISQUES.md`, section B) et guide de personnalisation interactif (`GUIDE_PERSONNALISATION.html`). Pour démarrer : `LISEZ_D_ABORD.md`.
 
@@ -170,7 +170,7 @@ Forward_To_The_Past/
 ├── vues/                   # un fichier par écran : auth, accueil, explorer, machine, fiche, mes_films, profil
 │   └── admin/              # espace admin : un fichier par onglet (+ connexion, chargement, comparaison, simulation)
 ├── data/                   # Catalogue_CNC_VF.csv + fttp.db
-├── static/                 # logo, bannière, avatars/ (+ mini/, avatars.json), 39 affiches locales
+├── static/                 # logo, bannière, avatars/ (+ mini/, avatars.json), 39 affiches locales, affiche_introuvable.png
 ├── .streamlit/             # config.toml (thème, fichiers statiques) + secrets.toml.exemple
 ├── .vscode/settings.json   # interpréteur .venv
 ├── LISEZMOI_CODE.md        # comprendre et modifier le code : « je veux modifier… → fichier », glossaire, règles
@@ -189,7 +189,8 @@ Forward_To_The_Past/
 
 | Symptôme | Solution |
 |---|---|
-| Affiches grises avec titre | Pas d'accès à `image.tmdb.org` : les 39 affiches locales restent affichées, les autres montrent un visuel de remplacement |
+| « Affiche introuvable » partout | Pas d'accès à `image.tmdb.org` : les 39 affiches locales restent affichées, les autres montrent `static/affiche_introuvable.png` (aussi utilisée pour les 19 films sans jaquette) |
+| Ancienne affiche ou ancien comportement après une mise à jour sur Streamlit Cloud | Le serveur garde des modules en mémoire : *Manage app* › ⋮ › **Reboot app** |
 | Polices absentes | Vérifier que le dossier `static/polices/` est présent (polices servies localement) |
 | Catalogue introuvable | Placer `Catalogue_CNC_VF.csv` dans `data/` |
 | Erreur après mise à jour | Supprimer `data/fttp.db` puis relancer (la base est recréée) |
