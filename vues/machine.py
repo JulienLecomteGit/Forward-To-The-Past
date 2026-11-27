@@ -176,7 +176,7 @@ def _panneau_convecteur(circuits: dict, anim: bool, n: int, film: dict) -> str:
     ], tape=anim)
     reals = ", ".join(film["real_noms"][:1])
     url = url_affiche(film["affiche"], "w342")
-    img = balise_affiche(url, film["titre"], paresseuse=False) if url else f'<div class="cv-sans">{escape(film["titre"])}</div>'
+    img = balise_affiche(url, film["titre"], paresseuse=False)
     billet = (f'<div class="cv-billet"><div class="cv-affiche">{img}<div class="cv-mystere"><span>?</span></div></div>'
               f'<div class="cv-pile"><div class="cv-calcul"><div class="cv-sur">CALCUL DE LA TRAJECTOIRE…</div>'
               f'<div class="cv-barres"><i></i><i></i><i></i><i></i><i></i></div></div>'

@@ -20,7 +20,7 @@ def jaquettes(cat, indices, marques: dict | None = None, classes: dict | None = 
         f = cat.df.iloc[int(j)]
         url = url_affiche(f["affiche"], "w185")
         titre = escape(f["titre"])
-        img = balise_affiche(url, f["titre"]) if url else f'<div class="fj-vide">{titre}</div>'
+        img = balise_affiche(url, f["titre"])
         badge = ""
         if j in marques:
             txt, cls = marques[j] if isinstance(marques[j], tuple) else (marques[j], "")

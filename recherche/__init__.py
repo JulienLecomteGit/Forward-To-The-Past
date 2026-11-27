@@ -7,7 +7,7 @@ ensuite à chaque lettre tapée, sans relancer la page. Python ne reçoit que le
 Le composant est déclaré ici (module « recherche ») : son nom technique « recherche.fttp_recherche » ne
 change pas, le CSS s'appuie dessus. Fichiers : composants/recherche/index.html (HTML/JS), recherche/index.py (index).
 
-Utilise     : config (chemins), recherche (index)
+Utilise     : config (chemins), medias (affiches), recherche (index)
 Utilisé par : vues (explorer, machine, mes_films), vues/admin (onglet_reglages)
 """
 from __future__ import annotations
@@ -16,6 +16,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from config.chemins import DOSSIER_COMPOSANT_RECHERCHE
+from medias.affiches import URL_INTROUVABLE
 from recherche.index import fichier_index
 
 _COMPOSANT = components.declare_component("fttp_recherche", path=str(DOSSIER_COMPOSANT_RECHERCHE))
@@ -31,6 +32,7 @@ def champ(cat, cle: str, placeholder: str, mode: str = "film", valeur: str = "",
     """
     ev = _COMPOSANT(fichier=fichier_index(cat), placeholder=placeholder, mode=mode, valeur=valeur or "",
                     restreindre=list(restreindre) if restreindre is not None else None, personnes=personnes, libelle=libelle,
+                    introuvable=URL_INTROUVABLE,
                     key=cle, default=None)
     ss = st.session_state
     if isinstance(ev, dict) and ev.get("n") != ss.get(f"_rch_{cle}"):

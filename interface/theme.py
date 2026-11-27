@@ -6,7 +6,7 @@ Modifier un style : ouvrir le fichier .css de la zone concernée (liste ZONES ci
 relancer l'app (Streamlit ne surveille que les fichiers .py : une modification de .css seule ne recharge pas la page).
 L'ordre de ZONES est l'ordre de la cascade CSS : une règle placée plus bas l'emporte. Ne pas le changer.
 
-Utilise     : —
+Utilise     : medias (affiches)
 Utilisé par : app, vues (machine)
 """
 from __future__ import annotations
@@ -14,6 +14,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import streamlit as st
+
+from medias.affiches import URL_INTROUVABLE
 
 DOSSIER = Path(__file__).resolve().parent / "style"
 
@@ -47,6 +49,8 @@ def _lire(nom: str) -> str:
 CSS = "\n" + "".join(_lire(nom) for nom in ZONES)  # thème complet (toujours injecté)
 CSS_MOBILE = "\n" + _lire("mobile.css")            # ajouté quand l'affichage « Mobile » est actif
 CSS_CADRE = "\n" + _lire("cadre_telephone.css")    # ajouté en « Mobile » sur ordinateur (cadre de téléphone)
+# Adresse de l'affiche de remplacement, lue par 16_divers.css (le nom du fichier reste écrit dans config/chemins.py)
+CSS_AFFICHE = f':root{{--affiche-introuvable:url("{URL_INTROUVABLE}")}}'
 
 
 def style(css: str) -> None:
@@ -57,4 +61,4 @@ def style(css: str) -> None:
 
 def injecter_theme(mobile: bool, cadre: bool) -> None:
     """Injecte le CSS de base, plus le CSS mobile et le cadre de téléphone si besoin."""
-    style(CSS + (CSS_MOBILE if mobile else "") + (CSS_CADRE if mobile and cadre else ""))
+    style(CSS_AFFICHE + CSS + (CSS_MOBILE if mobile else "") + (CSS_CADRE if mobile and cadre else ""))
