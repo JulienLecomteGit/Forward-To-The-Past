@@ -1,0 +1,3 @@
+cle TMDB presente True cle OMDb presente False
+tmdb 4561 ok 4559
+omdb cible 268 recu 0
