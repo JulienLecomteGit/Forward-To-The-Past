@@ -18,6 +18,7 @@ jobs:
       - name: Lancer l'étape
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
         run: |
           STEP=$(head -1 enrich/run.txt)
           python enrich/$STEP.py 2>&1 | tail -50 > enrich/out_log_$STEP.txt || true
