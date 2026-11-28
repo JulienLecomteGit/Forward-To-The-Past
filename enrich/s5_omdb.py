@@ -7,7 +7,8 @@ prio = ['31', '32', '23', '35', '34', '33', '24', '25', '26', '27', '29', '30']
 def score(r):
     m = set(r['manques'].split('|'))
     return min([prio.index(p) for p in prio if p in m] or [99])
-cible = sorted([r for r in rows if score(r) < 99], key=score)
+byt = {r['tconst']: r for r in rows}
+cible = [byt[t] for t in json.load(open('enrich/cible_omdb.json')) if t in byt]
 om = {}
 if O:
     for r in cible[:990]:
