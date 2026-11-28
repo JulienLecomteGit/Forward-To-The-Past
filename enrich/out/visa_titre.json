@@ -1,0 +1,534 @@
+{
+"tt0151558": {
+"titre": "La fabuleuse histoire de Mickey",
+"orig": "The Mickey Mouse Anniversary Show",
+"annee": "1968",
+"cand": []
+},
+"tt0187039": {
+"titre": "La Revanche du Frelon Vert",
+"orig": "Fury of the Dragon",
+"annee": "1976",
+"cand": []
+},
+"tt0090355": {
+"titre": "Les anges sont pliés en deux",
+"orig": "You're in the Movies",
+"annee": "1985",
+"cand": []
+},
+"tt0273772": {
+"titre": "Pas d'histoires!",
+"orig": "Pas d'histoires!",
+"annee": "2001",
+"cand": []
+},
+"tt0213268": {
+"titre": "Donald et Dingo champions olympiques",
+"orig": "Superstar Goofy",
+"annee": "1972",
+"cand": []
+},
+"tt0085571": {
+"titre": "Les anges se fendent la gueule",
+"orig": "Funny People 2",
+"annee": "1983",
+"cand": [
+[
+1.0,
+"Les anges se fendent la gueule. Funny people",
+"Jamie Uys",
+"Non renseigné",
+"Non renseigné",
+"60108",
+"Tout public",
+"Non renseigné"
+],
+[
+0.67,
+"Dieu me savonne (ex. Les farceurs). Funny people",
+"Jamie Uys",
+"1978",
+"Non renseigné",
+"49750",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt0201204": {
+"titre": "L'homme aux mains d'acier",
+"orig": "Xiao ba wang",
+"annee": "1973",
+"cand": []
+},
+"tt0258438": {
+"titre": "Le bébé Schtroumpf",
+"orig": "The Baby Smurf",
+"annee": "1984",
+"cand": []
+},
+"tt0052635": {
+"titre": "Mein Kampf",
+"orig": "Den blodiga tiden",
+"annee": "1960",
+"cand": [
+[
+1.0,
+"Ravissante (ex. Vainqueurs et vaincus). Den blodiga tiden",
+"Leiser Erwin",
+"1960",
+"Non renseigné",
+"23889",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0054765": {
+"titre": "Les corsaires des Caraïbes",
+"orig": "Il conquistatore di Maracaibo",
+"annee": "1961",
+"cand": [
+[
+1.0,
+"Les boucaniers des Caraïbes. Bucanieri dei Caraibi - Il conquistatore di Maracaibo",
+"Jean Martin",
+"1961",
+"Italie - Espagne",
+"25147",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0090678": {
+"titre": "American Warrior II: Le Chasseur",
+"orig": "Avenging Force",
+"annee": "1986",
+"cand": []
+},
+"tt0105562": {
+"titre": "Extrêmes limites",
+"orig": "Terminal Bliss",
+"annee": "1990",
+"cand": []
+},
+"tt0102793": {
+"titre": "Le cercle de feu",
+"orig": "Ring of Fire",
+"annee": "1991",
+"cand": []
+},
+"tt0055547": {
+"titre": "Le triomphe de Michel Strogoff",
+"orig": "Le triomphe de Michel Strogoff",
+"annee": "1961",
+"cand": []
+},
+"tt0055747": {
+"titre": "L'amour à vingt ans",
+"orig": "L'amour à vingt ans",
+"annee": "1962",
+"cand": [
+[
+0.8,
+"L'amour à 20 ans",
+"Shintaro Ishihara - Marcel Ophüls - Renzo Rosellini - François Truffaut - Andrzej Wajda",
+"1962",
+"Non renseigné",
+"25237",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt0060937": {
+"titre": "100,000 dollars pour Ringo",
+"orig": "100.000 dollari per Ringo",
+"annee": "1965",
+"cand": [
+[
+1.0,
+"100 000 dollars pour Ringo. I tre del Texas",
+"Alberto De Martino",
+"1966",
+"Espagne",
+"31660",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt0061773": {
+"titre": "Trois cavaliers pour fort Yuma",
+"orig": "Per pochi dollari ancora",
+"annee": "1966",
+"cand": []
+},
+"tt0063501": {
+"titre": "Colorado",
+"orig": "La resa dei conti",
+"annee": "1967",
+"cand": [
+[
+1.0,
+"Colorado. La resa dei conti",
+"Sergio Sollima",
+"2021",
+"Italie",
+"34968",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0065489": {
+"titre": "Brancaleone s'en va-t-aux croisades",
+"orig": "Brancaleone alle Crociate",
+"annee": "1970",
+"cand": [
+[
+1.0,
+"Brancaleone s'en va aux Croisades (ex. Brancaleone aux Croisades). Brancaleone alle Crociate",
+"Mario Monicelli ",
+"Non renseigné",
+"Italie",
+"38939",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt0180396": {
+"titre": "Les négriers",
+"orig": "Addio zio Tom",
+"annee": "1971",
+"cand": [
+[
+1.0,
+"Cargaison noire pour négrier (ex. Les négriers)",
+"Jacopetti Gualtiero - Franco Prosperi ",
+"1973",
+"Italie - France",
+"39471",
+"Interdit -18 ans",
+"Long-métrage"
+]
+]
+},
+"tt0069697": {
+"titre": "Attention on va s'fâcher...",
+"orig": "...altrimenti ci arrabbiamo!",
+"annee": "1974",
+"cand": []
+},
+"tt0198273": {
+"titre": "4 zizis au garde à vous",
+"orig": "4 marmittoni alle grandi manovre",
+"annee": "1974",
+"cand": []
+},
+"tt0073061": {
+"titre": "Goodbye, Bruce Lee",
+"orig": "Xin si wang you xi",
+"annee": "1975",
+"cand": [
+[
+0.67,
+"Good bye Bruce Lee",
+"Pin Lin - Harold Swartz",
+"1976",
+"Taïwan",
+"45113",
+"Interdit -13 ans",
+"Long-métrage"
+]
+]
+},
+"tt0075263": {
+"titre": "Monsieur St. Ives",
+"orig": "St. Ives",
+"annee": "1976",
+"cand": [
+[
+1.0,
+"Monsieur Saint Ives. St Ives",
+"Jack-Lee Thompson",
+"1976",
+"États-Unis",
+"46414",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0272078": {
+"titre": "Embraye bidasse... ça fume",
+"orig": "Embraye bidasse... ça fume",
+"annee": "1978",
+"cand": [
+[
+1.0,
+"Embraye ça fume bidasse (ex. Embraye bidasse ça fume)",
+"Max Pécas",
+"1978",
+"France",
+"49245",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt0087481": {
+"titre": "Attention les dégâts",
+"orig": "Non c'è due senza quattro",
+"annee": "1984",
+"cand": []
+},
+"tt0056467": {
+"titre": "Les sept péchés capitaux",
+"orig": "Les sept péchés capitaux",
+"annee": "1962",
+"cand": [
+[
+1.0,
+"Les sept péchés capitaux (version 1962)",
+"Philippe De Broca - Jacques Demy - Claude Chabrol - Sylvain Dhomme - Jean-Luc Godard - Édouard Molimaro - Roger Vadim",
+"1962",
+"France - Italie",
+"25275",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0068524": {
+"titre": "El Magnifico",
+"orig": "E poi lo chiamarono il magnifico",
+"annee": "1972",
+"cand": []
+},
+"tt0069095": {
+"titre": "Maintenant, on l'appelle Plata",
+"orig": "...Più forte ragazzi!",
+"annee": "1972",
+"cand": [
+[
+1.0,
+"T'avais qu'a pas commencer (ex. Maintenant on l'appelle Plata). Piu forte ragazzi",
+"Giuseppe Colizzi",
+"1973",
+"Non renseigné",
+"41399",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0071671": {
+"titre": "L'île sur le toit du monde",
+"orig": "The Island at the Top of the World",
+"annee": "1974",
+"cand": []
+},
+"tt0085867": {
+"titre": "La loi des seigneurs",
+"orig": "The Lords of Discipline",
+"annee": "1983",
+"cand": []
+},
+"tt0086642": {
+"titre": "Zig Zag Story",
+"orig": "Zig Zag Story",
+"annee": "1983",
+"cand": []
+},
+"tt0056904": {
+"titre": "Capitaine Sindbad",
+"orig": "Captain Sindbad",
+"annee": "1963",
+"cand": []
+},
+"tt0072951": {
+"titre": "La montagne ensorcelée",
+"orig": "Escape to Witch Mountain",
+"annee": "1975",
+"cand": []
+},
+"tt0078158": {
+"titre": "Les visiteurs d'un autre monde",
+"orig": "Return from Witch Mountain",
+"annee": "1978",
+"cand": []
+},
+"tt0084887": {
+"titre": "Le camion de la mort",
+"orig": "Warlords of the Twenty-First Century",
+"annee": "1982",
+"cand": []
+},
+"tt0085672": {
+"titre": "Hercule",
+"orig": "Hercules",
+"annee": "1983",
+"cand": []
+},
+"tt0063035": {
+"titre": "Les bérets verts",
+"orig": "The Green Berets",
+"annee": "1968",
+"cand": [
+[
+1.0,
+"Les bérets verts. The green berets",
+"John Wayne - Kellogg Ray ",
+"Non renseigné",
+"États-Unis",
+"34809",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt0073260": {
+"titre": "Le sixième continent",
+"orig": "The Land That Time Forgot",
+"annee": "1974",
+"cand": [
+[
+1.0,
+"Le 6ème continent (ex. Le pays des temps oubliés). The land that time forgot",
+"Kevin Connor",
+"1976",
+"Royaume-Uni",
+"45727",
+"Tout public",
+"Long-métrage"
+],
+[
+0.67,
+"Le continent oublié. People that time forget",
+"Kevin Connor",
+"1977",
+"États-Unis",
+"47866",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0086491": {
+"titre": "La Quatrième Dimension",
+"orig": "Twilight Zone: The Movie",
+"annee": "1983",
+"cand": [
+[
+0.67,
+"La 4ème dimension. Twilight zone",
+"John Landis - Steven Spielberg - Joe Dante - George Miller",
+"1983",
+"États-Unis",
+"57771",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0107927": {
+"titre": "L'affaire Karen McCoy",
+"orig": "The Real McCoy",
+"annee": "1993",
+"cand": [
+[
+0.75,
+"L'affaire Karen Mc Coy. The real Mc Coy",
+"Russel Mulcahy",
+"1994",
+"États-Unis",
+"86250",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0089695": {
+"titre": "Karaté Tiger : Le Tigre rouge",
+"orig": "No Retreat No Surrender",
+"annee": "1986",
+"cand": []
+},
+"tt0097027": {
+"titre": "Outrages",
+"orig": "Casualties of War",
+"annee": "1989",
+"cand": [
+[
+1.0,
+"Outrages (ex. La déraison). Casualties of war",
+"Brian De Palma",
+"1989",
+"États-Unis",
+"71671",
+"Interdit -13 ans",
+"Long-métrage"
+]
+]
+},
+"tt0097443": {
+"titre": "Les dieux sont tombés sur la tête... la suite",
+"orig": "The Gods Must Be Crazy II",
+"annee": "1989",
+"cand": [
+[
+1.0,
+"Les dieux sont tombés sur la tête la suite. Gods must be crazy 2",
+"Jamie Uys",
+"1989",
+"Afrique du Sud - États-Unis",
+"70198",
+"Tout public",
+"Long-métrage"
+],
+[
+0.88,
+"Les dieux sont tombés sur la tête. The gods must be crazy",
+"Jamie Uys",
+"1980",
+"Afrique du Sud - Botswana",
+"55144",
+"Tout public",
+"Long-métrage"
+]
+]
+},
+"tt0106453": {
+"titre": "Body",
+"orig": "Body of Evidence",
+"annee": "1993",
+"cand": []
+},
+"tt0107711": {
+"titre": "Cavale sans issue",
+"orig": "Nowhere to Run",
+"annee": "1993",
+"cand": [
+[
+1.0,
+"Cavale sans issue. Nowhere to run",
+"Eszterhas Joe - Harmon",
+"1993",
+"États-Unis",
+"82052",
+"Tout public",
+"Non renseigné"
+]
+]
+},
+"tt1220198": {
+"titre": "Phénomènes paranormaux",
+"orig": "The Fourth Kind",
+"annee": "2009",
+"cand": []
+}
+}
