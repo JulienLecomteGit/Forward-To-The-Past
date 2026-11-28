@@ -9,9 +9,10 @@ def score(r):
     return min([prio.index(p) for p in prio if p in m] or [99])
 byt = {r['tconst']: r for r in rows}
 cible = [byt[t] for t in json.load(open('enrich/cible_omdb.json')) if t in byt]
-om = {}
+om = json.load(open('enrich/out/omdb.json')) if os.path.exists('enrich/out/omdb.json') else {}
+cible = [r for r in cible if r['tconst'] not in om]
 if O:
-    for r in cible[:990]:
+    for r in cible[:980]:
         try:
             x = requests.get('https://www.omdbapi.com/', params={'i': r['tconst'], 'apikey': O, 'plot': 'short'}, timeout=30)
             if x.status_code == 200:
@@ -20,4 +21,4 @@ if O:
         except Exception: pass
         time.sleep(0.1)
 json.dump(om, open('enrich/out/omdb.json', 'w'), ensure_ascii=False)
-print('omdb cible', len(cible), 'recu', len(om))
+print('omdb restant', len(cible), 'total cumule', len(om))
