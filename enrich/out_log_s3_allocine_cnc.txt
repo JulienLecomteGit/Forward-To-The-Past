@@ -1,0 +1,5 @@
+allocine a traiter 3904
+allocine ok 3668
+registre lignes 95767 extrait 4518
+cnc a traiter 420
+cnc fini 420
